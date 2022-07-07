@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import moment from 'moment'
-import classNames from 'classnames'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import classNames from 'classnames';
 
 class Header extends Component {
   static propTypes = {
@@ -20,34 +20,34 @@ class Header extends Component {
     onChange: PropTypes.func,
     defaultOpenValue: PropTypes.object,
     onKeyDown: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     inputReadOnly: false
-  }
+  };
 
   constructor(props) {
-    super(props)
-    const { value, format } = props
+    super(props);
+    const { value, format } = props;
     this.state = {
       str: (value && value.format(format)) || '',
       invalid: false
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
-    const { value, format } = nextProps
+    const { value, format } = nextProps;
     this.setState({
       str: (value && value.format(format)) || '',
       invalid: false
-    })
+    });
   }
 
   onInputChange = event => {
-    const str = event.target.value
+    const str = event.target.value;
     this.setState({
       str
-    })
+    });
     const {
       format,
       hourOptions,
@@ -57,22 +57,22 @@ class Header extends Component {
       disabledMinutes,
       disabledSeconds,
       onChange
-    } = this.props
+    } = this.props;
 
     if (str) {
-      const { value: originalValue } = this.props
-      const value = this.getProtoValue()
-      const parsed = moment(str, format, true)
+      const { value: originalValue } = this.props;
+      const value = this.getProtoValue();
+      const parsed = moment(str, format, true);
       if (!parsed.isValid()) {
         this.setState({
           invalid: true
-        })
-        return
+        });
+        return;
       }
       value
         .hour(parsed.hour())
         .minute(parsed.minute())
-        .second(parsed.second())
+        .second(parsed.second());
 
       // if time value not allowed, response warning.
       if (
@@ -82,17 +82,17 @@ class Header extends Component {
       ) {
         this.setState({
           invalid: true
-        })
-        return
+        });
+        return;
       }
 
       // if time value is disabled, response warning.
-      const disabledHourOptions = disabledHours()
-      const disabledMinuteOptions = disabledMinutes(value.hour())
+      const disabledHourOptions = disabledHours();
+      const disabledMinuteOptions = disabledMinutes(value.hour());
       const disabledSecondOptions = disabledSeconds(
         value.hour(),
         value.minute()
-      )
+      );
       if (
         (disabledHourOptions &&
           disabledHourOptions.indexOf(value.hour()) >= 0) ||
@@ -103,8 +103,8 @@ class Header extends Component {
       ) {
         this.setState({
           invalid: true
-        })
-        return
+        });
+        return;
       }
 
       if (originalValue) {
@@ -114,38 +114,38 @@ class Header extends Component {
           originalValue.second() !== value.second()
         ) {
           // keep other fields for rc-calendar
-          const changedValue = originalValue
-          changedValue.hour(value.hour())
-          changedValue.minute(value.minute())
-          changedValue.second(value.second())
-          onChange(changedValue)
+          const changedValue = originalValue;
+          changedValue.hour(value.hour());
+          changedValue.minute(value.minute());
+          changedValue.second(value.second());
+          onChange(changedValue);
         }
       } else if (originalValue !== value) {
-        onChange(value)
+        onChange(value);
       }
     } else {
-      onChange(null)
+      onChange(null);
     }
 
     this.setState({
       invalid: false
-    })
-  }
+    });
+  };
 
   getProtoValue() {
-    const { value, defaultOpenValue } = this.props
-    return value || defaultOpenValue
+    const { value, defaultOpenValue } = this.props;
+    return value || defaultOpenValue;
   }
 
   getInput() {
-    const { prefixCls, placeholder, inputReadOnly } = this.props
-    const { invalid, str } = this.state
-    const invalidClass = invalid ? `${prefixCls}-input-invalid` : ''
+    const { prefixCls, placeholder, inputReadOnly } = this.props;
+    const { invalid, str } = this.state;
+    const invalidClass = invalid ? `${prefixCls}-input-invalid` : '';
     return (
       <input
         className={classNames(`${prefixCls}-input`, invalidClass)}
         ref={ref => {
-          this.refInput = ref
+          this.refInput = ref;
         }}
         onKeyDown={this.onKeyDown}
         value={str}
@@ -155,13 +155,13 @@ class Header extends Component {
         aria-live="polite"
         aria-invalid={invalid}
       />
-    )
+    );
   }
 
   render() {
-    const { prefixCls } = this.props
-    return <div className={`${prefixCls}-input-wrap`}>{this.getInput()}</div>
+    const { prefixCls } = this.props;
+    return <div className={`${prefixCls}-input-wrap`}>{this.getInput()}</div>;
   }
 }
 
-export default Header
+export default Header;

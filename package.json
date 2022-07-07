@@ -24,16 +24,14 @@
     "@babel/plugin-proposal-export-default-from": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@storybook/react": "^5.1.9",
+    "@storybook/react": "^6.5.9",
     "@types/styled-components": "^5.1.25",
-    "rc-tools": "^9.2.0",
-    "rc-util": "^4.0.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   },
   "dependencies": {
     "classnames": "2.x",
-    "focus-trap-react": "^6.0.0",
+    "focus-trap-react": "^9.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "prop-types": "^15.5.8",

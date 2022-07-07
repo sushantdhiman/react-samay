@@ -1,26 +1,26 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import classNames from 'classnames'
-import raf from 'raf'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import classNames from 'classnames';
+import raf from 'raf';
 
 const scrollTo = (element, to, duration) => {
   // jump to target if duration zero
   if (duration <= 0) {
     raf(() => {
-      element.scrollTop = to
-    })
-    return
+      element.scrollTop = to;
+    });
+    return;
   }
-  const difference = to - element.scrollTop
-  const perTick = (difference / duration) * 10
+  const difference = to - element.scrollTop;
+  const perTick = (difference / duration) * 10;
 
   raf(() => {
-    element.scrollTop += perTick
-    if (element.scrollTop === to) return
-    scrollTo(element, to, duration - 10)
-  })
-}
+    element.scrollTop += perTick;
+    if (element.scrollTop === to) return;
+    scrollTo(element, to, duration - 10);
+  });
+};
 
 const Column = styled.div`
   flex: 1;
@@ -55,7 +55,7 @@ const Column = styled.div`
       background: #edfaff;
     }
   }
-`
+`;
 
 class Select extends Component {
   static propTypes = {
@@ -67,70 +67,70 @@ class Select extends Component {
     onSelect: PropTypes.func,
     onMouseEnter: PropTypes.func,
     focused: PropTypes.bool
-  }
+  };
 
   constructor(props) {
-    super(props)
-    this.selectRef = React.createRef()
-    this.listRef = React.createRef()
+    super(props);
+    this.selectRef = React.createRef();
+    this.listRef = React.createRef();
   }
 
   componentDidMount() {
     // jump to selected option
-    this.scrollToSelected(0)
+    this.scrollToSelected(0);
   }
 
   componentDidUpdate(prevProps) {
-    const { selectedIndex, focused } = this.props
+    const { selectedIndex, focused } = this.props;
     // smooth scroll to selected option
     if (prevProps.selectedIndex !== selectedIndex) {
-      this.scrollToSelected(120)
+      this.scrollToSelected(120);
     }
     if (prevProps.focused !== focused && focused) {
       // focus on selectedIndex
-      this.changeFocusBy(0)
+      this.changeFocusBy(0);
     }
   }
 
   onSelect = value => {
-    const { onSelect, type } = this.props
-    onSelect(type, value)
-  }
+    const { onSelect, type } = this.props;
+    onSelect(type, value);
+  };
 
   getOptionLabel(value) {
     // 01 -> 1
     // 30 -> 30
-    const number = parseInt(value, 10)
+    const number = parseInt(value, 10);
 
     if (isNaN(number)) {
       // am -> AM
-      return value.toUpperCase()
+      return value.toUpperCase();
     }
 
-    return number
+    return number;
   }
 
   getOptions() {
-    const { options, selectedIndex, prefixCls } = this.props
+    const { options, selectedIndex, prefixCls } = this.props;
     return options.map((item, index) => {
-      const selected = selectedIndex === index
+      const selected = selectedIndex === index;
       const cls = classNames({
         [`${prefixCls}-select-option-selected`]: selected,
         [`${prefixCls}-select-option-disabled`]: item.disabled
-      })
+      });
       const onClick = item.disabled
         ? undefined
         : () => {
-            this.onSelect(item.value)
-          }
+            this.onSelect(item.value);
+          };
       const onKeyDown = e => {
         if (e.keyCode === 13 || e.keyCode === 32) {
           // enter or space
-          onClick()
-          e.preventDefault()
-          e.stopPropagation()
+          onClick();
+          e.preventDefault();
+          e.stopPropagation();
         }
-      }
+      };
 
       return (
         <li
@@ -146,70 +146,70 @@ class Select extends Component {
         >
           {item.value}
         </li>
-      )
-    })
+      );
+    });
   }
 
   handleKeyDown = e => {
     if (e.keyCode === 40) {
       // down arrow
-      this.changeFocusBy(1)
-      e.preventDefault()
-      e.stopPropagation()
+      this.changeFocusBy(1);
+      e.preventDefault();
+      e.stopPropagation();
     } else if (e.keyCode === 38) {
       // up arrow
-      this.changeFocusBy(-1)
-      e.preventDefault()
-      e.stopPropagation()
+      this.changeFocusBy(-1);
+      e.preventDefault();
+      e.stopPropagation();
     }
     // pass keydown to parent
-    this.props.onKeyDown(e)
-  }
+    this.props.onKeyDown(e);
+  };
 
   changeFocusBy(offset) {
-    const { options, selectedIndex } = this.props
+    const { options, selectedIndex } = this.props;
 
     // get new element index
-    let index = selectedIndex + offset
+    let index = selectedIndex + offset;
     if (index < 0) {
-      index = options.length - 1
+      index = options.length - 1;
     } else if (index >= options.length) {
-      index = 0
+      index = 0;
     }
 
     // get new value
-    const selectedOption = options[index]
-    this.onSelect(selectedOption.value)
+    const selectedOption = options[index];
+    this.onSelect(selectedOption.value);
 
     // get new ref
-    const list = this.listRef.current
+    const list = this.listRef.current;
     if (!list) {
-      return
+      return;
     }
-    const optionRef = list.children[index]
-    optionRef.focus()
+    const optionRef = list.children[index];
+    optionRef.focus();
   }
 
   scrollToSelected(duration) {
     // move to selected item
-    const { selectedIndex } = this.props
-    const list = this.listRef.current
+    const { selectedIndex } = this.props;
+    const list = this.listRef.current;
     if (!list) {
-      return
+      return;
     }
-    let index = selectedIndex
+    let index = selectedIndex;
     if (index < 0) {
-      index = 0
+      index = 0;
     }
-    const topOption = list.children[index]
-    const to = topOption.offsetTop
-    scrollTo(this.selectRef.current, to, duration)
+    const topOption = list.children[index];
+    const to = topOption.offsetTop;
+    scrollTo(this.selectRef.current, to, duration);
   }
 
   render() {
-    const { prefixCls, options, label } = this.props
+    const { prefixCls, options, label } = this.props;
     if (options.length === 0) {
-      return null
+      return null;
     }
     return (
       <Column
@@ -221,8 +221,8 @@ class Select extends Component {
           {this.getOptions()}
         </ul>
       </Column>
-    )
+    );
   }
 }
 
-export default Select
+export default Select;
