@@ -9,7 +9,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   padding-top: 10vh;
-  background-color: tomato;
   width: 100vw;
   height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -18,6 +17,13 @@ const Wrapper = styled.div`
 
 storiesOf('Timepicker', module).add('default', () => (
   <Wrapper>
-    <TimePicker name="time" defaultValue={moment()} />
+    <TimePicker
+      name="time"
+      defaultValue={moment()}
+      style={{
+        width: 400,
+        height: 50
+      }}
+    />
   </Wrapper>
 ));
