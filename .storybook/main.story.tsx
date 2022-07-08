@@ -16,43 +16,21 @@ const Wrapper = styled.div`
 `;
 
 storiesOf('Timepicker', module)
-  .addDecorator(Story => (
+  .addDecorator((Story) => (
     <Wrapper>
       <Story />
     </Wrapper>
   ))
-  .add('default', () => (
-    <TimePicker
-      name="time"
-      defaultValue={moment()}
-      style={{
-        width: 400,
-        height: 50
-      }}
-    />
-  ))
+  .add('default', () => <TimePicker name="time" defaultValue={moment()} />)
   .add('use12Hours', () => (
-    <TimePicker
-      name="time"
-      use12Hours
-      defaultValue={moment()}
-      style={{
-        width: 400,
-        height: 50
-      }}
-    />
+    <TimePicker name="time" use12Hours defaultValue={moment()} />
   ))
   .add('use12Hours - no seconds - step - readonly', () => (
     <TimePicker
       name="time"
-      inputReadOnly
+      defaultValue={moment()}
       use12Hours
       minuteStep={15}
       showSecond={false}
-      defaultValue={moment()}
-      style={{
-        width: 400,
-        height: 50
-      }}
     />
   ));

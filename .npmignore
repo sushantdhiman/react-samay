@@ -21,9 +21,11 @@ yarn-debug.log*
 yarn-error.log*
 
 /storybook-static
+/.parcel-cache
 
 /src
 /stories
 .prettierrc
 .eslintrc
 .babelrc
+

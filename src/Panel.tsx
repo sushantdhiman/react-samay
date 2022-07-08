@@ -1,76 +1,38 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import classNames from 'classnames';
-import Header from './Header';
-import Combobox from './Combobox';
 import FocusTrap from 'focus-trap-react';
 
-function noop() {}
+import Header from './Header';
+import Combobox from './Combobox';
+import { generateOptions, toNearestValidTime, noop } from './helpers';
 
-function generateOptions(
-  length,
-  disabledOptions,
-  hideDisabledOptions,
-  step = 1
-) {
-  const arr = [];
-  for (let value = 0; value < length; value += step) {
-    if (
-      !disabledOptions ||
-      disabledOptions.indexOf(value) < 0 ||
-      !hideDisabledOptions
-    ) {
-      arr.push(value);
-    }
-  }
-  return arr;
-}
+type Props = {
+  prefixCls: string;
+  className: string;
+  defaultOpenValue: Moment;
+  value: Moment;
+  placeholder: string;
+  format: string;
+  inputReadOnly: boolean;
+  disabledHours: () => number[];
+  disabledMinutes: (hour: number | null) => number[];
+  disabledSeconds: (hour: number | null, minute: number | null) => number[];
+  hideDisabledOptions: boolean;
+  onChange: (value: Moment) => void;
+  onAmPmChange: (ampm: string) => void;
+  closePanel: () => void;
+  showHour: boolean;
+  showMinute: boolean;
+  showSecond: boolean;
+  use12Hours: boolean;
+  hourStep: number;
+  minuteStep: number;
+  secondStep: number;
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+};
 
-function toNearestValidTime(time, hourOptions, minuteOptions, secondOptions) {
-  const hour = hourOptions
-    .slice()
-    .sort((a, b) => Math.abs(time.hour() - a) - Math.abs(time.hour() - b))[0];
-  const minute = minuteOptions
-    .slice()
-    .sort(
-      (a, b) => Math.abs(time.minute() - a) - Math.abs(time.minute() - b)
-    )[0];
-  const second = secondOptions
-    .slice()
-    .sort(
-      (a, b) => Math.abs(time.second() - a) - Math.abs(time.second() - b)
-    )[0];
-  return moment(`${hour}:${minute}:${second}`, 'HH:mm:ss');
-}
-
-class Panel extends Component {
-  static propTypes = {
-    prefixCls: PropTypes.string,
-    className: PropTypes.string,
-    defaultOpenValue: PropTypes.object,
-    value: PropTypes.object,
-    placeholder: PropTypes.string,
-    format: PropTypes.string,
-    inputReadOnly: PropTypes.bool,
-    disabledHours: PropTypes.func,
-    disabledMinutes: PropTypes.func,
-    disabledSeconds: PropTypes.func,
-    hideDisabledOptions: PropTypes.bool,
-    onChange: PropTypes.func,
-    onAmPmChange: PropTypes.func,
-    closePanel: PropTypes.func,
-    showHour: PropTypes.bool,
-    showMinute: PropTypes.bool,
-    showSecond: PropTypes.bool,
-    use12Hours: PropTypes.bool,
-    hourStep: PropTypes.number,
-    minuteStep: PropTypes.number,
-    secondStep: PropTypes.number,
-    addon: PropTypes.func,
-    onKeyDown: PropTypes.func
-  };
-
+class Panel extends Component<Props, { value: Moment }> {
   static defaultProps = {
     prefixCls: 'react-samay-panel',
     onChange: noop,
@@ -79,53 +41,57 @@ class Panel extends Component {
     disabledSeconds: noop,
     defaultOpenValue: moment(),
     use12Hours: false,
-    addon: noop,
     onKeyDown: noop,
     onAmPmChange: noop,
-    inputReadOnly: false
+    inputReadOnly: false,
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      value: props.value
+      value: props.value,
     };
+
+    this.onChange = this.onChange.bind(this);
+    this.onAmPmChange = this.onAmPmChange.bind(this);
+    this.disabledHours = this.disabledHours.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props) {
     const value = nextProps.value;
     if (value) {
       this.setState({
-        value
+        value,
       });
     }
   }
 
-  onChange = newValue => {
+  onChange(newValue: Moment) {
     const { onChange } = this.props;
     this.setState({ value: newValue });
     onChange(newValue);
-  };
+  }
 
-  onAmPmChange = ampm => {
+  onAmPmChange(ampm: string) {
     const { onAmPmChange } = this.props;
     onAmPmChange(ampm);
-  };
+  }
 
-  disabledHours = () => {
+  disabledHours() {
     const { use12Hours, disabledHours } = this.props;
     let disabledOptions = disabledHours();
+
     if (use12Hours && Array.isArray(disabledOptions)) {
       if (this.isAM()) {
         disabledOptions = disabledOptions
-          .filter(h => h < 12)
-          .map(h => (h === 0 ? 12 : h));
+          .filter((h) => h < 12)
+          .map((h) => (h === 0 ? 12 : h));
       } else {
-        disabledOptions = disabledOptions.map(h => (h === 12 ? 12 : h - 12));
+        disabledOptions = disabledOptions.map((h) => (h === 12 ? 12 : h - 12));
       }
     }
     return disabledOptions;
-  };
+  }
 
   isAM() {
     const { defaultOpenValue } = this.props;
@@ -148,13 +114,12 @@ class Panel extends Component {
       format,
       defaultOpenValue,
       closePanel,
-      addon,
       use12Hours,
       onKeyDown,
       hourStep,
       minuteStep,
       secondStep,
-      inputReadOnly
+      inputReadOnly,
     } = this.props;
     const { value } = this.state;
     const disabledHourOptions = this.disabledHours();
@@ -194,7 +159,7 @@ class Panel extends Component {
         focusTrapOptions={{
           onDeactivate: () => closePanel(),
           clickOutsideDeactivates: true,
-          escapeDeactivates: true
+          escapeDeactivates: true,
         }}
       >
         <div className={classNames(className, prefixCls)}>
@@ -233,7 +198,6 @@ class Panel extends Component {
             use12Hours={use12Hours}
             isAM={this.isAM()}
           />
-          {addon(this)}
         </div>
       </FocusTrap>
     );
