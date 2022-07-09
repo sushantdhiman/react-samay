@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 
 type Props = {
+  name: string;
   format: string;
   prefixCls: string;
   placeholder: string;
@@ -156,7 +157,8 @@ class Header extends Component<Props, { str: string; invalid: boolean }> {
   }
 
   getInput() {
-    const { prefixCls, placeholder, inputReadOnly, onKeyDown } = this.props;
+    const { name, prefixCls, placeholder, inputReadOnly, onKeyDown } =
+      this.props;
     const { invalid, str } = this.state;
     const invalidClass = invalid ? `${prefixCls}-input-invalid` : '';
     return (
@@ -165,6 +167,7 @@ class Header extends Component<Props, { str: string; invalid: boolean }> {
         ref={this.refInput}
         onKeyDown={onKeyDown}
         value={str}
+        name={name}
         placeholder={placeholder}
         onChange={this.onInputChange}
         readOnly={!!inputReadOnly}

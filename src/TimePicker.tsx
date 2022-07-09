@@ -6,6 +6,10 @@ import { format } from 'date-fns';
 import { noop } from './helpers';
 import Panel from './Panel';
 
+const Wrapper = styled.div`
+  display: flex;
+`;
+
 const TimeDisplay = styled.div`
   display: flex;
   align-items: center;
@@ -202,6 +206,7 @@ export default class Picker extends Component<
 
   getPanelElement() {
     const {
+      name,
       className,
       prefixCls,
       placeholder,
@@ -222,6 +227,7 @@ export default class Picker extends Component<
     } = this.props;
     return (
       <Panel
+        name={name}
         className={className}
         prefixCls={`${prefixCls}-panel`}
         ref={this.savePanelRef}
@@ -284,6 +290,7 @@ export default class Picker extends Component<
       className,
       ariaLabelFunc,
       onFocus,
+      use12Hours,
       inputIcon,
       style,
     } = this.props;
@@ -291,7 +298,7 @@ export default class Picker extends Component<
     const { open, value } = this.state;
 
     return (
-      <div
+      <Wrapper
         className={classNames(`${prefixCls}-wrapper`, className)}
         style={style}
       >
@@ -324,13 +331,15 @@ export default class Picker extends Component<
             <TimeText className={`${prefixCls}-input-time`}>
               {value ? format(value, this.getFormat(false)) : placeholder}
             </TimeText>
-            <AMPMText className={`${prefixCls}-input-ampm`}>
-              &nbsp;{value ? format(value, 'a') : ''}
-            </AMPMText>
+            {use12Hours && (
+              <AMPMText className={`${prefixCls}-input-ampm`}>
+                &nbsp;{value ? format(value, 'a') : ''}
+              </AMPMText>
+            )}
             {inputIcon || <span className={`${prefixCls}-icon`} />}
           </TimeDisplay>
         )}
-      </div>
+      </Wrapper>
     );
   }
 }

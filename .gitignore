@@ -1,5 +1,5 @@
 node_modules
-storybook-static
 lib
 types
 .parcel-cache
+.storybook-static

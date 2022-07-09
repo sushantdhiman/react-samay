@@ -172,6 +172,9 @@ class Select extends Component<Props> {
 
     // get new value
     const selectedOption = options[index];
+
+    if (selectedOption.disabled) return;
+
     this.onSelect(selectedOption.value);
 
     // get new ref

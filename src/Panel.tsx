@@ -8,6 +8,7 @@ import Combobox from './Combobox';
 import { generateOptions, toNearestValidTime, noop } from './helpers';
 
 type Props = {
+  name: string;
   prefixCls: string;
   className: string;
   defaultOpenValue: Date;
@@ -102,6 +103,7 @@ class Panel extends Component<Props, { value: Date }> {
 
   render() {
     const {
+      name,
       prefixCls,
       className,
       placeholder,
@@ -159,6 +161,7 @@ class Panel extends Component<Props, { value: Date }> {
     return (
       <FocusTrap
         focusTrapOptions={{
+          initialFocus: `.${prefixCls}-select-option-selected`,
           onDeactivate: () => closePanel(),
           clickOutsideDeactivates: true,
           escapeDeactivates: true,
@@ -166,6 +169,7 @@ class Panel extends Component<Props, { value: Date }> {
       >
         <div className={classNames(className, prefixCls)}>
           <Header
+            name={name}
             prefixCls={prefixCls}
             defaultOpenValue={validDefaultOpenValue}
             value={value}
