@@ -28,6 +28,7 @@ storiesOf('Timepicker', module)
     <TimePicker
       name="time"
       defaultValue={new Date()}
+      inputReadOnly
       use12Hours
       minuteStep={15}
       showSecond={false}

@@ -298,41 +298,37 @@ export default class Picker extends Component<
         {open ? (
           this.getPanelElement()
         ) : (
-          <span>
-            <TimeDisplay
-              id={id}
-              ref={this.saveInputRef}
-              role="button"
-              tabIndex={0}
-              className={`${prefixCls}-input`}
-              onClick={() => {
-                if (onFocus) onFocus();
+          <TimeDisplay
+            id={id}
+            ref={this.saveInputRef}
+            role="button"
+            tabIndex={0}
+            className={`${prefixCls}-input`}
+            onClick={() => {
+              if (onFocus) onFocus();
+              this.setOpen(true);
+            }}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13 || e.keyCode === 32) {
+                // enter or space
                 this.setOpen(true);
-              }}
-              onKeyDown={(e) => {
-                if (e.keyCode === 13 || e.keyCode === 32) {
-                  // enter or space
-                  this.setOpen(true);
 
-                  if (onFocus) onFocus();
+                if (onFocus) onFocus();
 
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-              }}
-              aria-label={
-                value && ariaLabelFunc(format(value, this.getFormat()))
+                e.preventDefault();
+                e.stopPropagation();
               }
-            >
-              <TimeText className={`${prefixCls}-input-time`}>
-                {value ? format(value, this.getFormat(false)) : placeholder}
-              </TimeText>
-              <AMPMText className={`${prefixCls}-input-ampm`}>
-                &nbsp;{value ? format(value, 'a') : ''}
-              </AMPMText>
-              {inputIcon || <span className={`${prefixCls}-icon`} />}
-            </TimeDisplay>
-          </span>
+            }}
+            aria-label={value && ariaLabelFunc(format(value, this.getFormat()))}
+          >
+            <TimeText className={`${prefixCls}-input-time`}>
+              {value ? format(value, this.getFormat(false)) : placeholder}
+            </TimeText>
+            <AMPMText className={`${prefixCls}-input-ampm`}>
+              &nbsp;{value ? format(value, 'a') : ''}
+            </AMPMText>
+            {inputIcon || <span className={`${prefixCls}-icon`} />}
+          </TimeDisplay>
         )}
       </div>
     );
