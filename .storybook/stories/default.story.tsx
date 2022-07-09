@@ -11,6 +11,12 @@ import {
   disabledSeconds,
 } from './helper';
 
+const Wrapper = styled.div`
+  /* System font stack */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+`;
+
 const TimePicker = styled(RawTimePicker).attrs({
   bg: 'tomato',
   color: 'white',
@@ -32,6 +38,7 @@ const TimePicker = styled(RawTimePicker).attrs({
   .react-samay-panel-input,
   .react-samay-input {
     height: auto;
+    width: 100%;
     font-size: 30px;
     font-weight: 300;
     font-variant-numeric: tabular-nums;
@@ -42,7 +49,6 @@ const TimePicker = styled(RawTimePicker).attrs({
     }
   }
   .react-samay-panel-input {
-    width: 100%;
     color: ${({ color }) => color};
     /* color: ${({ bg }) => bg}; */
     background-color: transparent;
@@ -99,6 +105,27 @@ const TimePicker = styled(RawTimePicker).attrs({
 `;
 
 storiesOf('Timepicker', module)
+  .addDecorator((Story) => (
+    <Wrapper>
+      <Story />
+    </Wrapper>
+  ))
+  .add('readme', () => {
+    return (
+      <>
+        <h2>React-Samay</h2>
+        <p>
+          Time picker library for React.js. Find out more on{' '}
+          <a
+            href="https://github.com/sushantdhiman/react-samay"
+            target="_blank"
+          >
+            Github
+          </a>
+        </p>
+      </>
+    );
+  })
   .add('default', () => (
     <TimePicker defaultValue={new Date()} onChange={onChange} />
   ))
@@ -143,30 +170,30 @@ storiesOf('Timepicker', module)
   ))
   .add('format', () => (
     <>
-      <h3>showHour=false</h3>
+      <h5>showHour=false</h5>
       <TimePicker defaultValue={new Date()} showHour={false} />
       <br />
-      <h3>showMinute=false</h3>
+      <h5>showMinute=false</h5>
       <TimePicker defaultValue={new Date()} showMinute={false} />
       <br />
-      <h3>showSecond=false</h3>
+      <h5>showSecond=false</h5>
       <TimePicker defaultValue={new Date()} showSecond={false} />
       <br />
-      <h3>showMinute=false, showSecond=false</h3>
+      <h5>showMinute=false, showSecond=false</h5>
       <TimePicker
         defaultValue={new Date()}
         showMinute={false}
         showSecond={false}
       />
       <br />
-      <h3>showHour=false, showSecond=false</h3>
+      <h5>showHour=false, showSecond=false</h5>
       <TimePicker
         defaultValue={new Date()}
         showHour={false}
         showSecond={false}
       />
       <br />
-      <h3>showHour=false, showMinute=false</h3>
+      <h5>showHour=false, showMinute=false</h5>
       <TimePicker
         defaultValue={new Date()}
         showHour={false}
