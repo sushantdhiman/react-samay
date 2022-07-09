@@ -1,5 +1,7 @@
 # React Samay
 
+![npm](https://img.shields.io/npm/v/react-samay)
+
 Time picker library for React.js
 
 > This is mainly a fork from [rc-time-picker](https://github.com/react-component/time-picker/),
