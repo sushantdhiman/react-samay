@@ -1,5 +1,5 @@
 import raf from 'raf';
-import moment, { Moment } from 'moment';
+import { getHours, getMinutes, getSeconds, parse } from 'date-fns';
 
 export function noop(): void {
   /* empty noop function */
@@ -62,23 +62,26 @@ export function generateOptions(
 }
 
 export function toNearestValidTime(
-  time: Moment,
+  time: Date,
   hourOptions: number[],
   minuteOptions: number[],
   secondOptions: number[]
-) {
+): Date {
   const hour = hourOptions
     .slice()
-    .sort((a, b) => Math.abs(time.hour() - a) - Math.abs(time.hour() - b))[0];
+    .sort(
+      (a, b) => Math.abs(getHours(time) - a) - Math.abs(getHours(time) - b)
+    )[0];
   const minute = minuteOptions
     .slice()
     .sort(
-      (a, b) => Math.abs(time.minute() - a) - Math.abs(time.minute() - b)
+      (a, b) => Math.abs(getMinutes(time) - a) - Math.abs(getMinutes(time) - b)
     )[0];
   const second = secondOptions
     .slice()
     .sort(
-      (a, b) => Math.abs(time.second() - a) - Math.abs(time.second() - b)
+      (a, b) => Math.abs(getSeconds(time) - a) - Math.abs(getSeconds(time) - b)
     )[0];
-  return moment(`${hour}:${minute}:${second}`, 'HH:mm:ss');
+
+  return parse(`${hour}:${minute}:${second}`, 'HH:mm:ss', new Date());
 }

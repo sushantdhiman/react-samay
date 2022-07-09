@@ -41,9 +41,9 @@
     "react-dom": ">=17"
   },
   "dependencies": {
-    "classnames": "2.x",
+    "classnames": "^2.3.1",
+    "date-fns": "^2.28.0",
     "focus-trap-react": "^9.0.2",
-    "moment": "^2.29.4",
     "raf": "^3.4.1",
     "styled-components": "^5.3.0"
   }

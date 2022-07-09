@@ -1,7 +1,7 @@
 import React, { Component, KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import classNames from 'classnames';
-import moment, { Moment } from 'moment';
+import { format } from 'date-fns';
 
 import { noop } from './helpers';
 import Panel from './Panel';
@@ -22,11 +22,11 @@ const AMPMText = styled.div`
 
 type Props = {
   prefixCls: string;
-  value: Moment;
-  defaultOpenValue: Moment;
+  value: Date;
+  defaultOpenValue: Date;
   inputReadOnly: boolean;
   allowEmpty: boolean;
-  defaultValue: Moment;
+  defaultValue: Date;
   open: boolean;
   defaultOpen: boolean;
   placeholder: string;
@@ -40,7 +40,7 @@ type Props = {
   disabledMinutes: (hour: number | null) => number[];
   disabledSeconds: (hour: number | null, minute: number | null) => number[];
   hideDisabledOptions: boolean;
-  onChange: (value: Moment) => void;
+  onChange: (value: Date) => void;
   onAmPmChange: (ampm: string) => void;
   onOpen: (value: { open: true }) => void;
   onClose: (value: { open: false }) => void;
@@ -62,7 +62,7 @@ type PickerProps = typeof Picker.defaultProps & Props;
 
 export default class Picker extends Component<
   PickerProps,
-  { value: Moment; open: boolean }
+  { value: Date; open: boolean }
 > {
   static defaultProps: Partial<Props> = {
     prefixCls: 'react-samay',
@@ -71,7 +71,7 @@ export default class Picker extends Component<
     className: '',
     popupClassName: '',
     id: '',
-    defaultOpenValue: moment(),
+    defaultOpenValue: new Date(),
     allowEmpty: true,
     showHour: true,
     showMinute: true,
@@ -132,7 +132,7 @@ export default class Picker extends Component<
     }
   }
 
-  onPanelChange(value: Moment) {
+  onPanelChange(value: Date) {
     this.setValue(value);
   }
 
@@ -162,7 +162,7 @@ export default class Picker extends Component<
     }
   }
 
-  setValue(value: Moment) {
+  setValue(value: Date) {
     const { onChange } = this.props;
 
     if (!('value' in this.props)) {
@@ -321,14 +321,14 @@ export default class Picker extends Component<
                 }
               }}
               aria-label={
-                value && ariaLabelFunc(value.format(this.getFormat()))
+                value && ariaLabelFunc(format(value, this.getFormat()))
               }
             >
               <TimeText className={`${prefixCls}-input-time`}>
-                {value ? value.format(this.getFormat(false)) : placeholder}
+                {value ? format(value, this.getFormat(false)) : placeholder}
               </TimeText>
               <AMPMText className={`${prefixCls}-input-ampm`}>
-                &nbsp;{value ? value.format('a') : ''}
+                &nbsp;{value ? format(value, 'a') : ''}
               </AMPMText>
               {inputIcon || <span className={`${prefixCls}-icon`} />}
             </TimeDisplay>

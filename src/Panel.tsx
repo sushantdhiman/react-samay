@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import moment, { Moment } from 'moment';
 import classNames from 'classnames';
 import FocusTrap from 'focus-trap-react';
+import { getHours, getMinutes } from 'date-fns';
 
 import Header from './Header';
 import Combobox from './Combobox';
@@ -10,8 +10,8 @@ import { generateOptions, toNearestValidTime, noop } from './helpers';
 type Props = {
   prefixCls: string;
   className: string;
-  defaultOpenValue: Moment;
-  value: Moment;
+  defaultOpenValue: Date;
+  value: Date;
   placeholder: string;
   format: string;
   inputReadOnly: boolean;
@@ -19,7 +19,7 @@ type Props = {
   disabledMinutes: (hour: number | null) => number[];
   disabledSeconds: (hour: number | null, minute: number | null) => number[];
   hideDisabledOptions: boolean;
-  onChange: (value: Moment) => void;
+  onChange: (value: Date) => void;
   onAmPmChange: (ampm: string) => void;
   closePanel: () => void;
   showHour: boolean;
@@ -32,14 +32,14 @@ type Props = {
   onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-class Panel extends Component<Props, { value: Moment }> {
+class Panel extends Component<Props, { value: Date }> {
   static defaultProps = {
     prefixCls: 'react-samay-panel',
     onChange: noop,
     disabledHours: noop,
     disabledMinutes: noop,
     disabledSeconds: noop,
-    defaultOpenValue: moment(),
+    defaultOpenValue: new Date(),
     use12Hours: false,
     onKeyDown: noop,
     onAmPmChange: noop,
@@ -66,7 +66,7 @@ class Panel extends Component<Props, { value: Moment }> {
     }
   }
 
-  onChange(newValue: Moment) {
+  onChange(newValue: Date) {
     const { onChange } = this.props;
     this.setState({ value: newValue });
     onChange(newValue);
@@ -94,10 +94,10 @@ class Panel extends Component<Props, { value: Moment }> {
   }
 
   isAM() {
-    const { defaultOpenValue } = this.props;
-    const { value } = this.state;
-    const realValue = value || defaultOpenValue;
-    return realValue.hour() >= 0 && realValue.hour() < 12;
+    const realValue = this.state.value || this.props.defaultOpenValue;
+    const hours = getHours(realValue);
+
+    return hours >= 0 && hours < 12;
   }
 
   render() {
@@ -123,10 +123,12 @@ class Panel extends Component<Props, { value: Moment }> {
     } = this.props;
     const { value } = this.state;
     const disabledHourOptions = this.disabledHours();
-    const disabledMinuteOptions = disabledMinutes(value ? value.hour() : null);
+    const disabledMinuteOptions = disabledMinutes(
+      value ? getHours(value) : null
+    );
     const disabledSecondOptions = disabledSeconds(
-      value ? value.hour() : null,
-      value ? value.minute() : null
+      value ? getHours(value) : null,
+      value ? getMinutes(value) : null
     );
     const hourOptions = generateOptions(
       24,

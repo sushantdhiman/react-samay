@@ -1,7 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import styled from 'styled-components';
-import moment from 'moment';
 
 import TimePicker from '../src/';
 
@@ -21,14 +20,14 @@ storiesOf('Timepicker', module)
       <Story />
     </Wrapper>
   ))
-  .add('default', () => <TimePicker name="time" defaultValue={moment()} />)
+  .add('default', () => <TimePicker name="time" defaultValue={new Date()} />)
   .add('use12Hours', () => (
-    <TimePicker name="time" use12Hours defaultValue={moment()} />
+    <TimePicker name="time" use12Hours defaultValue={new Date()} />
   ))
   .add('use12Hours - no seconds - step - readonly', () => (
     <TimePicker
       name="time"
-      defaultValue={moment()}
+      defaultValue={new Date()}
       use12Hours
       minuteStep={15}
       showSecond={false}
