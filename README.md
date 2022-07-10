@@ -1,10 +1,10 @@
 # React Samay
 
-![npm](https://img.shields.io/npm/v/react-samay)
+[![npm](https://img.shields.io/npm/v/react-samay)](https://npmjs.com/package/react-samay)
 
-Time picker library for React.js
+Time picker for React.js
 
-> This is mainly a fork from [rc-time-picker](https://github.com/react-component/time-picker/),
+> This is a fork from [rc-time-picker](https://github.com/react-component/time-picker/),
 > which is no longer maintained. I have also mixed styling
 > support from [time-picker-io](https://github.com/codercodingthecode/time-picker-io).
 
@@ -34,10 +34,10 @@ npm i --save react-samay
 ## Usage
 
 ```js
-import TimePicker from 'react-samay';
+import { TimePicker } from 'react-samay';
 import ReactDOM from 'react-dom';
 
-ReactDOM.render(<TimePicker />, container);
+ReactDOM.render(<TimePicker />, <div id="app" />);
 ```
 
 ## Examples
