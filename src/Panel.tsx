@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
+import cx from 'classnames';
 import FocusTrap from 'focus-trap-react';
 import { getHours, getMinutes } from 'date-fns';
 
@@ -11,6 +11,7 @@ type Props = {
   name: string;
   prefixCls: string;
   className: string;
+  inputClassName: string;
   defaultOpenValue: Date;
   value: Date;
   placeholder: string;
@@ -107,6 +108,7 @@ class Panel extends Component<Props, { value: Date }> {
       name,
       prefixCls,
       className,
+      inputClassName,
       placeholder,
       disabled,
       disabledMinutes,
@@ -169,10 +171,11 @@ class Panel extends Component<Props, { value: Date }> {
           escapeDeactivates: true,
         }}
       >
-        <div className={classNames(className, `${prefixCls}-inner`)}>
+        <div className={cx(className, `${prefixCls}-inner`)}>
           <Header
             name={name}
             prefixCls={prefixCls}
+            inputClassName={inputClassName}
             defaultOpenValue={validDefaultOpenValue}
             value={value}
             format={format}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
+import cx from 'classnames';
 import {
   set,
   format as formatDate,
@@ -13,6 +13,7 @@ type Props = {
   name: string;
   format: string;
   prefixCls: string;
+  inputClassName: string;
   placeholder: string;
   value: Date;
   inputReadOnly: boolean;
@@ -158,13 +159,23 @@ class Header extends Component<Props, { str: string; invalid: boolean }> {
   }
 
   getInput() {
-    const { name, prefixCls, disabled, placeholder, inputReadOnly, onKeyDown } =
-      this.props;
+    const {
+      name,
+      prefixCls,
+      inputClassName,
+      disabled,
+      placeholder,
+      inputReadOnly,
+      onKeyDown,
+    } = this.props;
+
     const { invalid, str } = this.state;
-    const invalidClass = invalid ? `${prefixCls}-input-invalid` : '';
+
     return (
       <input
-        className={classNames(`${prefixCls}-input`, invalidClass)}
+        className={cx(`${prefixCls}-input`, inputClassName, {
+          [`${prefixCls}-input-invalid`]: invalid,
+        })}
         ref={this.refInput}
         onKeyDown={onKeyDown}
         value={str}

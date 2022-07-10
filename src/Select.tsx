@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import classNames from 'classnames';
+import cx from 'classnames';
 
 import type { Selector } from './interface';
 import { scrollTo, noop } from './helpers';
@@ -105,7 +105,7 @@ class Select extends Component<Props> {
 
     return options.map((item, index) => {
       const selected = selectedIndex === index;
-      const cls = classNames({
+      const cls = cx({
         [`${prefixCls}-select-option-selected`]: selected,
         [`${prefixCls}-select-option-disabled`]: item.disabled,
       });

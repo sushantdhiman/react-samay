@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { storiesOf } from '@storybook/react';
 import { mix, transparentize } from 'polished';
 
-import RawTimePicker from '../../src/';
+import { TimePicker as RawTimePicker } from '../../src/';
 import {
   onChange,
   disabledHours,
@@ -81,11 +81,13 @@ const TimePicker = styled(RawTimePicker).attrs({
       color: ${({ bg }) => bg};
     }
   }
-  /* internal borders */
+
   .react-samay-panel-combobox {
+    background-color: ${({ color, bg }) => mix(0.92, bg, color)};
     border-top: 1px solid ${transparentize(0.85, '#000')};
     border-radius: 0px 0px 4px 4px;
   }
+
   .react-samay-panel-select + .react-samay-panel-select {
     border-left: 1px solid ${transparentize(0.85, '#000')};
   }
@@ -113,6 +115,9 @@ storiesOf('Timepicker', module)
       </>
     );
   })
+  .add('no theme', () => (
+    <RawTimePicker defaultValue={new Date()} onChange={onChange} />
+  ))
   .add('default', () => (
     <TimePicker defaultValue={new Date()} onChange={onChange} />
   ))

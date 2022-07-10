@@ -13,7 +13,7 @@ const Columns = styled.div`
   position: absolute;
   z-index: 100;
   width: 100%;
-  background-color: inherit;
+  background-color: white;
 `;
 
 type Props = {
