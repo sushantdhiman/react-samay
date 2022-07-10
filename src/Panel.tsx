@@ -16,6 +16,7 @@ type Props = {
   placeholder: string;
   format: string;
   inputReadOnly: boolean;
+  disabled?: boolean;
   disabledHours: () => number[];
   disabledMinutes: (hour: number | null) => number[];
   disabledSeconds: (hour: number | null, minute: number | null) => number[];
@@ -107,6 +108,7 @@ class Panel extends Component<Props, { value: Date }> {
       prefixCls,
       className,
       placeholder,
+      disabled,
       disabledMinutes,
       disabledSeconds,
       hideDisabledOptions,
@@ -167,13 +169,14 @@ class Panel extends Component<Props, { value: Date }> {
           escapeDeactivates: true,
         }}
       >
-        <div className={classNames(className, prefixCls)}>
+        <div className={classNames(className, `${prefixCls}-inner`)}>
           <Header
             name={name}
             prefixCls={prefixCls}
             defaultOpenValue={validDefaultOpenValue}
             value={value}
             format={format}
+            disabled={disabled}
             placeholder={placeholder}
             hourOptions={hourOptions}
             minuteOptions={minuteOptions}

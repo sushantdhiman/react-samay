@@ -32,7 +32,7 @@ export function formatOption(option: number, disabledOptions: number[]) {
     value = `0${option}`;
   }
 
-  if (disabledOptions && disabledOptions.indexOf(option) >= 0) {
+  if (disabledOptions.indexOf(option) >= 0) {
     disabled = true;
   }
 
@@ -50,11 +50,7 @@ export function generateOptions(
 ) {
   const arr = [];
   for (let value = 0; value < length; value += step) {
-    if (
-      !disabledOptions ||
-      disabledOptions.indexOf(value) < 0 ||
-      !hideDisabledOptions
-    ) {
+    if (disabledOptions.indexOf(value) < 0 || !hideDisabledOptions) {
       arr.push(value);
     }
   }

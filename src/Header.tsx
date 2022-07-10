@@ -16,6 +16,7 @@ type Props = {
   placeholder: string;
   value: Date;
   inputReadOnly: boolean;
+  disabled?: boolean;
   hourOptions: number[];
   minuteOptions: number[];
   secondOptions: number[];
@@ -157,7 +158,7 @@ class Header extends Component<Props, { str: string; invalid: boolean }> {
   }
 
   getInput() {
-    const { name, prefixCls, placeholder, inputReadOnly, onKeyDown } =
+    const { name, prefixCls, disabled, placeholder, inputReadOnly, onKeyDown } =
       this.props;
     const { invalid, str } = this.state;
     const invalidClass = invalid ? `${prefixCls}-input-invalid` : '';
@@ -168,6 +169,7 @@ class Header extends Component<Props, { str: string; invalid: boolean }> {
         onKeyDown={onKeyDown}
         value={str}
         name={name}
+        disabled={disabled}
         placeholder={placeholder}
         onChange={this.onInputChange}
         readOnly={!!inputReadOnly}
@@ -178,8 +180,11 @@ class Header extends Component<Props, { str: string; invalid: boolean }> {
   }
 
   render() {
-    const { prefixCls } = this.props;
-    return <div className={`${prefixCls}-input-wrap`}>{this.getInput()}</div>;
+    return (
+      <div className={`${this.props.prefixCls}-input-wrap`}>
+        {this.getInput()}
+      </div>
+    );
   }
 }
 

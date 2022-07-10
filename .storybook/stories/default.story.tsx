@@ -24,39 +24,25 @@ const TimePicker = styled(RawTimePicker).attrs({
   background-color: ${({ color, bg }) => mix(0.92, bg, color)};
   border-radius: 4px;
   width: 300px;
-  .react-samay-input {
-    padding: 8px;
-    justify-content: center;
-    color: ${({ color }) => color};
-    border: 1px solid ${({ bg }) => bg};
-    border-radius: 4px;
-    &:focus {
-      box-shadow: 0 0 0 1px ${({ color }) => color};
-    }
-  }
+
   /* input font style */
   .react-samay-panel-input,
   .react-samay-input {
+    border: 1px solid ${({ bg }) => bg};
+    border-radius: 4px;
     height: auto;
     width: 100%;
     font-size: 30px;
     font-weight: 300;
-    font-variant-numeric: tabular-nums;
+    background-color: transparent;
     border: none;
     text-align: center;
+    color: ${({ color }) => color};
+    padding-top: 8px;
+    padding-bottom: 8px;
     &:focus {
       outline: none;
     }
-  }
-  .react-samay-panel-input {
-    color: ${({ color }) => color};
-    /* color: ${({ bg }) => bg}; */
-    background-color: transparent;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-  .react-samay-input-time {
-    font-size: inherit;
   }
   /* panel hover/focus styles */
   .react-samay-panel-select {
@@ -130,14 +116,20 @@ storiesOf('Timepicker', module)
     <TimePicker defaultValue={new Date()} onChange={onChange} />
   ))
   .add('disabled', () => (
-    <TimePicker
-      showSecond
-      defaultValue={new Date()}
-      onChange={onChange}
-      disabledHours={disabledHours}
-      disabledMinutes={disabledMinutes}
-      disabledSeconds={disabledSeconds}
-    />
+    <>
+      <h5>disabled=true</h5>
+      <TimePicker disabled defaultValue={new Date()} onChange={onChange} />
+      <br />
+      <h5>disabledHours,disabledMinutes,disabledSeconds</h5>
+      <TimePicker
+        showSecond
+        defaultValue={new Date()}
+        onChange={onChange}
+        disabledHours={disabledHours}
+        disabledMinutes={disabledMinutes}
+        disabledSeconds={disabledSeconds}
+      />
+    </>
   ))
   .add('hidden', () => (
     <TimePicker

@@ -10,20 +10,6 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const TimeDisplay = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const TimeText = styled.div`
-  font-size: 16px;
-`;
-
-const AMPMText = styled.div`
-  font-size: 12px;
-  text-transform: uppercase;
-`;
-
 type Props = {
   prefixCls: string;
   value: Date;
@@ -32,6 +18,8 @@ type Props = {
   allowEmpty: boolean;
   defaultValue: Date;
   open: boolean;
+  id: string;
+  disabled?: boolean;
   defaultOpen: boolean;
   placeholder: string;
   format: string;
@@ -56,9 +44,7 @@ type Props = {
   minuteStep: number;
   secondStep: number;
   onKeyDown: () => void;
-  id: string;
   ariaLabelFunc: (value: string) => string;
-  inputIcon: React.ReactElement;
   style: React.CSSProperties;
 };
 
@@ -69,12 +55,13 @@ export default class Picker extends Component<
   { value: Date; open: boolean }
 > {
   static defaultProps: Partial<Props> = {
+    id: '',
+    disabled: false,
     prefixCls: 'react-samay',
     defaultOpen: false,
     inputReadOnly: false,
     className: '',
     popupClassName: '',
-    id: '',
     defaultOpenValue: new Date(),
     allowEmpty: true,
     showHour: true,
@@ -120,6 +107,7 @@ export default class Picker extends Component<
     this.onVisibleChange = this.onVisibleChange.bind(this);
     this.closePanel = this.closePanel.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: PickerProps) {
@@ -145,12 +133,6 @@ export default class Picker extends Component<
     onAmPmChange(ampm);
   }
 
-  // onClear = event => {
-  //   event.stopPropagation()
-  //   this.setValue(null)
-  //   this.setOpen(false)
-  // }
-
   onVisibleChange(open: boolean) {
     this.setOpen(open);
   }
@@ -161,9 +143,14 @@ export default class Picker extends Component<
   }
 
   onKeyDown(e: KeyboardEvent) {
-    if (e.keyCode === 40) {
+    if ([13, 32, 40].includes(e.keyCode)) {
       this.setOpen(true);
     }
+  }
+
+  onClick() {
+    if (this.props.onFocus) this.props.onFocus();
+    this.setOpen(true);
   }
 
   setValue(value: Date) {
@@ -215,6 +202,7 @@ export default class Picker extends Component<
       disabledSeconds,
       hideDisabledOptions,
       inputReadOnly,
+      disabled,
       showHour,
       showMinute,
       showSecond,
@@ -233,6 +221,7 @@ export default class Picker extends Component<
         ref={this.savePanelRef}
         value={this.state.value}
         inputReadOnly={inputReadOnly}
+        disabled={disabled}
         onChange={this.onPanelChange}
         onAmPmChange={this.onAmPmChange}
         defaultOpenValue={defaultOpenValue}
@@ -277,67 +266,49 @@ export default class Picker extends Component<
     if (el) el.focus();
   }
 
-  blur() {
-    const el = this.saveInputRef.current;
-    if (el) el.blur();
-  }
-
   render() {
     const {
       prefixCls,
-      placeholder,
       id,
+      name,
+      disabled,
+      placeholder,
+      use12Hours,
+      inputReadOnly,
       className,
       ariaLabelFunc,
       onFocus,
-      use12Hours,
-      inputIcon,
+      onBlur,
       style,
     } = this.props;
 
     const { open, value } = this.state;
+    const strValue = (value && format(value, this.getFormat(use12Hours))) || '';
 
     return (
       <Wrapper
-        className={classNames(`${prefixCls}-wrapper`, className)}
+        id={id}
         style={style}
+        className={classNames(`${prefixCls}-wrapper`, className)}
       >
         {open ? (
           this.getPanelElement()
         ) : (
-          <TimeDisplay
-            id={id}
-            ref={this.saveInputRef}
-            role="button"
-            tabIndex={0}
+          <input
+            type="text"
+            name={name}
             className={`${prefixCls}-input`}
-            onClick={() => {
-              if (onFocus) onFocus();
-              this.setOpen(true);
-            }}
-            onKeyDown={(e) => {
-              if (e.keyCode === 13 || e.keyCode === 32) {
-                // enter or space
-                this.setOpen(true);
-
-                if (onFocus) onFocus();
-
-                e.preventDefault();
-                e.stopPropagation();
-              }
-            }}
-            aria-label={value && ariaLabelFunc(format(value, this.getFormat()))}
-          >
-            <TimeText className={`${prefixCls}-input-time`}>
-              {value ? format(value, this.getFormat(false)) : placeholder}
-            </TimeText>
-            {use12Hours && (
-              <AMPMText className={`${prefixCls}-input-ampm`}>
-                &nbsp;{value ? format(value, 'a') : ''}
-              </AMPMText>
-            )}
-            {inputIcon || <span className={`${prefixCls}-icon`} />}
-          </TimeDisplay>
+            ref={this.saveInputRef}
+            placeholder={placeholder}
+            disabled={disabled}
+            readOnly={!!inputReadOnly}
+            aria-label={ariaLabelFunc(strValue)}
+            defaultValue={strValue}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            onClick={this.onClick}
+            onKeyDown={this.onKeyDown}
+          />
         )}
       </Wrapper>
     );
