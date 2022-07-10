@@ -8,6 +8,7 @@ import Panel from './Panel';
 
 const Wrapper = styled.div`
   display: flex;
+  position: relative;
 `;
 
 type Props = {

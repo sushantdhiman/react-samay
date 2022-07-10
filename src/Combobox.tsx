@@ -10,6 +10,10 @@ import type { Selector } from './interface';
 const Columns = styled.div`
   display: flex;
   flex-direction: row;
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  background-color: inherit;
 `;
 
 type Props = {

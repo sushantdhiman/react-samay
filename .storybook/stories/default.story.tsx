@@ -84,6 +84,7 @@ const TimePicker = styled(RawTimePicker).attrs({
   /* internal borders */
   .react-samay-panel-combobox {
     border-top: 1px solid ${transparentize(0.85, '#000')};
+    border-radius: 0px 0px 4px 4px;
   }
   .react-samay-panel-select + .react-samay-panel-select {
     border-left: 1px solid ${transparentize(0.85, '#000')};
