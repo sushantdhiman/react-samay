@@ -48,39 +48,41 @@ type Props = {
   value: Date;
 };
 
-type PickerProps = typeof Picker.defaultProps & Props;
+const defaultProps: Partial<Props> = {
+  id: '',
+  disabled: false,
+  prefixCls: 'react-samay',
+  defaultOpen: false,
+  inputReadOnly: false,
+  className: '',
+  popupClassName: '',
+  inputClassName: '',
+  defaultOpenValue: new Date(),
+  use12Hours: false,
+  showHour: true,
+  showMinute: true,
+  showSecond: true,
+  disabledHours: () => [],
+  disabledMinutes: () => [],
+  disabledSeconds: () => [],
+  hideDisabledOptions: false,
+  onChange: noop,
+  onAmPmChange: noop,
+  onOpen: noop,
+  onClose: noop,
+  onFocus: noop,
+  onBlur: noop,
+  onKeyDown: noop,
+  getAriaLabel: () => 'react-samay-input-time',
+};
+
+type PickerProps = typeof defaultProps & Props;
 
 export default class Picker extends Component<
   PickerProps,
   { value: Date; open: boolean }
 > {
-  static defaultProps: Partial<Props> = {
-    id: '',
-    disabled: false,
-    prefixCls: 'react-samay',
-    defaultOpen: false,
-    inputReadOnly: false,
-    className: '',
-    popupClassName: '',
-    inputClassName: '',
-    defaultOpenValue: new Date(),
-    use12Hours: false,
-    showHour: true,
-    showMinute: true,
-    showSecond: true,
-    disabledHours: () => [],
-    disabledMinutes: () => [],
-    disabledSeconds: () => [],
-    hideDisabledOptions: false,
-    onChange: noop,
-    onAmPmChange: noop,
-    onOpen: noop,
-    onClose: noop,
-    onFocus: noop,
-    onBlur: noop,
-    onKeyDown: noop,
-    getAriaLabel: () => 'react-samay-input-time',
-  };
+  static defaultProps: Partial<Props> = defaultProps;
 
   private saveInputRef: RefObject<HTMLInputElement>;
   private savePanelRef: RefObject<Panel>;
