@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
+import styled from 'styled-components';
 import FocusTrap from 'focus-trap-react';
 import { getHours, getMinutes } from 'date-fns';
 
 import Header from './Header';
 import Combobox from './Combobox';
 import { generateOptions, toNearestValidTime, noop } from './helpers';
+
+const Wrapper = styled.div`
+  position: relative;
+`;
 
 type Props = {
   name: string;
@@ -171,7 +176,7 @@ class Panel extends Component<Props, { value: Date }> {
           escapeDeactivates: true,
         }}
       >
-        <div className={cx(className, `${prefixCls}-inner`)}>
+        <Wrapper className={cx(className, `${prefixCls}-inner`)}>
           <Header
             name={name}
             prefixCls={prefixCls}
@@ -210,7 +215,7 @@ class Panel extends Component<Props, { value: Date }> {
             use12Hours={use12Hours}
             isAM={this.isAM()}
           />
-        </div>
+        </Wrapper>
       </FocusTrap>
     );
   }

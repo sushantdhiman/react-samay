@@ -117,7 +117,11 @@ storiesOf('Timepicker', module)
     );
   })
   .add('no theme', () => (
-    <RawTimePicker defaultValue={new Date()} onChange={onChange} />
+    <RawTimePicker
+      style={{ width: 250 }}
+      defaultValue={new Date()}
+      onChange={onChange}
+    />
   ))
   .add('default', () => (
     <TimePicker defaultValue={new Date()} onChange={onChange} />
