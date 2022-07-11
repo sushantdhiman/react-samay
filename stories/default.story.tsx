@@ -72,7 +72,7 @@ const TimePicker = styled(RawTimePicker).attrs({
       color: ${({ bg }) => bg};
       &:hover,
       &:focus {
-        background-color: ${({ color, bg }) => transparentize(0.3, color)};
+        background-color: ${({ color }) => transparentize(0.3, color)};
       }
     }
 
@@ -93,7 +93,7 @@ const TimePicker = styled(RawTimePicker).attrs({
   }
 `;
 
-storiesOf('Timepicker', module)
+storiesOf('Timepicker/Basics', module)
   .addDecorator((Story) => (
     <Wrapper>
       <Story />

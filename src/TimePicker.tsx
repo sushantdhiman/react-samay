@@ -215,17 +215,15 @@ export default class Picker extends Component<
 
   render() {
     const {
-      prefixCls,
       id,
       name,
       disabled,
       placeholder,
+      style,
+      prefixCls,
       className,
       inputClassName,
       getAriaLabel,
-      onFocus,
-      onBlur,
-      style,
       disabledHours,
       disabledMinutes,
       disabledSeconds,
@@ -236,6 +234,8 @@ export default class Picker extends Component<
       showSecond,
       defaultOpenValue,
       use12Hours,
+      onFocus,
+      onBlur,
       onKeyDown,
       hourStep,
       minuteStep,
@@ -290,7 +290,8 @@ export default class Picker extends Component<
             disabled={disabled}
             readOnly={!!inputReadOnly}
             aria-label={getAriaLabel(strValue)}
-            defaultValue={strValue}
+            value={strValue}
+            onChange={noop}
             onFocus={onFocus}
             onBlur={onBlur}
             onClick={this.onClick}

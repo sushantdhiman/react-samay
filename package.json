@@ -15,8 +15,8 @@
     "storybook": "start-storybook -c .storybook",
     "build-storybook": "build-storybook -c .storybook -o .storybook-static",
     "build": "parcel build",
-    "prettier": "prettier --write './src/**/*.+(ts|tsx)'",
-    "lint": "eslint '{src,.storybook}/**/*.*'",
+    "prettier": "prettier --write './(src|stories)/**/*.+(ts|tsx)'",
+    "lint": "eslint '{src,stories}/**/*.*'",
     "tsc": "npx tsc"
   },
   "devDependencies": {
