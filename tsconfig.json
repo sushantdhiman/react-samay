@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
@@ -14,5 +13,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": ["lib", "node_modules"],
-  "include": ["src"]
+  "include": ["src", "stories"]
 }

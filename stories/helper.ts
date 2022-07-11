@@ -16,7 +16,9 @@ export function disabledHours() {
   return [0, 1, 2, 3, 4, 5, 6, 7, 8, 22, 23];
 }
 
-export function disabledMinutes(h: number) {
+export function disabledMinutes(h: number | null) {
+  if (!h) return [];
+
   switch (h) {
     case 9:
       return generateOptions(60, [30]);
@@ -27,6 +29,8 @@ export function disabledMinutes(h: number) {
   }
 }
 
-export function disabledSeconds(h: number, m: number) {
+export function disabledSeconds(h: number | null, m: number | null) {
+  if (!h || !m) return [];
+
   return [h + (m % 60)];
 }

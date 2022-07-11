@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { storiesOf } from '@storybook/react';
 import { mix, transparentize } from 'polished';
 
-import { TimePicker as RawTimePicker } from '../../src/';
+import { TimePicker as RawTimePicker } from '../src/';
 import {
   onChange,
   disabledHours,
@@ -107,6 +107,7 @@ storiesOf('Timepicker', module)
           Time picker library for React.js. Find out more on{' '}
           <a
             href="https://github.com/sushantdhiman/react-samay"
+            rel="noreferrer"
             target="_blank"
           >
             Github

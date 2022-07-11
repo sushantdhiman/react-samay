@@ -25,6 +25,7 @@ yarn-error.log*
 
 /src
 /stories
+/.storybook
 .prettierrc
 .eslintrc
 .babelrc
