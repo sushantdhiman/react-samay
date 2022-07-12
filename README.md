@@ -53,7 +53,7 @@ You can find more storybook examples [here](https://sushantdhiman.com/projects/r
 ### TimePicker
 
 | Name                | Type               | Default       | Description                                                                         |
-| ------------------- | ------------------ | ------------- | ----------------------------------------------------------------------------------- | --- |
+| ------------------- | ------------------ | ------------- | ----------------------------------------------------------------------------------- |
 | prefixCls           | String             | 'react-samay' | prefixCls of this component                                                         |
 | disabled            | Boolean            | false         | whether picker is disabled                                                          |
 | open                | Boolean            | false         | current open state of picker. controlled prop                                       |
@@ -65,7 +65,7 @@ You can find more storybook examples [here](https://sushantdhiman.com/projects/r
 | inputClassName      | String             | ''            | time picker input element className                                                 |
 | name                | String             | -             | name of input element                                                               |
 | id                  | String             | ''            | id to set on time picker                                                            |
-| showHour            | Boolean            | true          | whether show hour                                                                   |     |
+| showHour            | Boolean            | true          | whether show hour                                                                   |     
 | showMinute          | Boolean            | true          | whether show minute                                                                 |
 | showSecond          | Boolean            | true          | whether show second                                                                 |
 | format              | String             | -             | date-fns supported format                                                           |
