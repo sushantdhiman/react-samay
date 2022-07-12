@@ -52,33 +52,33 @@ You can find more storybook examples [here](https://sushantdhiman.com/projects/r
 
 ### TimePicker
 
-| Name                | Type               | Default       | Description                                                                         |
-| ------------------- | ------------------ | ------------- | ----------------------------------------------------------------------------------- |
-| prefixCls           | String             | 'react-samay' | prefixCls of this component                                                         |
-| disabled            | Boolean            | false         | whether picker is disabled                                                          |
-| open                | Boolean            | false         | current open state of picker. controlled prop                                       |
-| defaultValue        | Date               | null          | default initial value                                                               |
-| defaultOpenValue    | Date               | new Date()    | default open panel value, used to set utcOffset,locale if value/defaultValue absent |
-| value               | Date               | null          | current value                                                                       |
-| placeholder         | String             | ''            | time input's placeholder                                                            |
-| className           | String             | ''            | time picker className                                                               |
-| inputClassName      | String             | ''            | time picker input element className                                                 |
-| name                | String             | -             | name of input element                                                               |
-| id                  | String             | ''            | id to set on time picker                                                            |
-| showHour            | Boolean            | true          | whether show hour                                                                   |     
-| showMinute          | Boolean            | true          | whether show minute                                                                 |
-| showSecond          | Boolean            | true          | whether show second                                                                 |
-| format              | String             | -             | date-fns supported format                                                           |
-| disabledHours       | Function           | -             | disabled hour options                                                               |
-| disabledMinutes     | Function           | -             | disabled minute options                                                             |
-| disabledSeconds     | Function           | -             | disabled second options                                                             |
-| use12Hours          | Boolean            | false         | 12 hours display mode                                                               |
-| hideDisabledOptions | Boolean            | false         | whether hide disabled options                                                       |
-| onChange            | Function           | null          | called when time-picker value changes                                               |
-| onAmPmChange        | Function           | null          | called when time-picker meridiem changes                                            |
-| onOpen              | Function({ open }) |               | called when time picker panel is opened                                             |
-| onClose             | Function({ open }) |               | called when time picker panel is closed                                             |
-| hourStep            | Number             | 1             | interval between hours in picker                                                    |
-| minuteStep          | Number             | 1             | interval between minutes in picker                                                  |
-| secondStep          | Number             | 1             | interval between seconds in picker                                                  |
-| inputReadOnly       | Boolean            | false         | set input to read only                                                              |
+| Name                | Type               | Default       |
+| ------------------- | ------------------ | ------------- |
+| prefixCls           | String             | 'react-samay' |
+| disabled            | Boolean            | false         |
+| open                | Boolean            | false         |
+| defaultValue        | Date               | null          |
+| defaultOpenValue    | Date               | new Date()    |
+| value               | Date               | null          |
+| placeholder         | String             | ''            |
+| className           | String             | ''            |
+| inputClassName      | String             | ''            |
+| name                | String             | -             |
+| id                  | String             | ''            |
+| showHour            | Boolean            | true          |
+| showMinute          | Boolean            | true          |
+| showSecond          | Boolean            | true          |
+| format              | String             | -             |
+| disabledHours       | Function           | -             |
+| disabledMinutes     | Function           | -             |
+| disabledSeconds     | Function           | -             |
+| use12Hours          | Boolean            | false         |
+| hideDisabledOptions | Boolean            | false         |
+| onChange            | Function           | null          |
+| onAmPmChange        | Function           | null          |
+| onOpen              | Function({ open }) |               |
+| onClose             | Function({ open }) |               |
+| hourStep            | Number             | 1             |
+| minuteStep          | Number             | 1             |
+| secondStep          | Number             | 1             |
+| inputReadOnly       | Boolean            | false         |
