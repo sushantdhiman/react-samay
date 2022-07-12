@@ -8,11 +8,24 @@ import { scrollTo, noop } from './helpers';
 const Column = styled.div`
   flex: 1;
 
-  /* Pos rel needed to make offsetTop work
-  used in scrolling to selected option */
+  /*
+   * position relative needed to make offsetTop work
+   * used in scrolling to selected option
+   */
   position: relative;
   overflow-y: auto;
   max-height: 12em;
+  border: 1px solid #e9e9e9;
+
+  scrollbar-width: 8px;
+
+  &:first-child {
+    border-left: 0;
+  }
+
+  &:last-child {
+    border-right: 0;
+  }
 
   ul {
     list-style: none;
@@ -26,16 +39,28 @@ const Column = styled.div`
     list-style: none;
     margin: 0;
     padding: 0;
-    /* padding: 0 0 0 16px; */
-    /* width: 100%; */
+    width: 100%;
     height: 24px;
     line-height: 24px;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
     user-select: none;
 
     &:hover {
       background: #edfaff;
+    }
+
+    &.${({ className }) => className + '-option-selected'} {
+      background: #f7f7f7;
+      font-weight: bold;
+    }
+
+    &.${({ className }) => className + '-option-disabled'} {
+      color: #ccc;
+      &:hover {
+        background: transparent;
+        cursor: not-allowed;
+      }
     }
   }
 `;

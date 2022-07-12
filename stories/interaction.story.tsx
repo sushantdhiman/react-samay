@@ -1,15 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import { storiesOf } from '@storybook/react';
 import { startOfDay } from 'date-fns';
 
+import { Wrapper } from './helper';
 import { TimePicker } from '../src/';
-
-const Wrapper = styled.div`
-  /* System font stack */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-`;
 
 function WithReset() {
   const [state, setState] = React.useState(new Date());

@@ -14,6 +14,10 @@ const Columns = styled.div`
   z-index: 100;
   width: 100%;
   background-color: white;
+  border-radius: 4px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  margin-left: -1px;
 `;
 
 type Props = {
