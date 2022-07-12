@@ -37,7 +37,6 @@ type Props = {
   onOpen: (value: { open: true }) => void;
   open: boolean;
   placeholder: string;
-  popupClassName: string;
   prefixCls: string;
   secondStep: number;
   showHour: boolean;
@@ -55,8 +54,8 @@ const defaultProps: Partial<Props> = {
   defaultOpen: false,
   inputReadOnly: false,
   className: '',
-  popupClassName: '',
   inputClassName: '',
+  placeholder: '',
   defaultOpenValue: new Date(),
   use12Hours: false,
   showHour: true,
