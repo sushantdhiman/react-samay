@@ -1,6 +1,7 @@
 # React Samay
 
 [![npm](https://img.shields.io/npm/v/react-samay)](https://npmjs.com/package/react-samay)
+[![Node.js CI](https://github.com/sushantdhiman/react-samay/actions/workflows/ci.js.yml/badge.svg)](https://github.com/sushantdhiman/react-samay/actions/workflows/ci.js.yml)
 
 Time picker for React.js
 
@@ -8,17 +9,10 @@ Time picker for React.js
 > which is no longer maintained. I have also mixed styling
 > support from [time-picker-io](https://github.com/codercodingthecode/time-picker-io).
 
-## Beta Release
-
-This migrated package is still not ready for production, as there might be some
-bugs related to code refactor. I'll welcome any PR(s) or bug reports so this package
-can be improved.
-
 ## Features
 
 - Uses native date object
-- Dropdown based hours, minutes, seconds & meridiem selection, better for desktop
-  users with keyboard / mouse.
+- Dropdown based hours, minutes, seconds & meridiem selection.
 - Keyboard navigation
 - Similar API as `rc-time-picker`
 - Written with Typescript, with built-in typings
