@@ -16,13 +16,17 @@ function WithReset() {
     setState(new Date());
   };
 
+  const onFocus = () => {
+    console.log('Focused');
+  };
+
   return (
     <div>
       <button onClick={onReset}>reset</button>
       <button onClick={onNow}>now</button>
       <br />
       <br />
-      <TimePicker value={state} onChange={setState} />
+      <TimePicker value={state} onChange={setState} onFocus={onFocus} />
     </div>
   );
 }

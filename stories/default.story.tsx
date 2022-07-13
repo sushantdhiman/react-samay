@@ -73,14 +73,6 @@ storiesOf('Timepicker/Basics', module)
       onChange={onChange}
     />
   ))
-  .add('input-readonly', () => (
-    <TimePicker
-      defaultValue={new Date()}
-      minuteStep={15}
-      showSecond={false}
-      inputReadOnly
-    />
-  ))
   .add('format', () => (
     <>
       <h5>showHour=false</h5>

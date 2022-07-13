@@ -81,4 +81,3 @@ You can find more storybook examples [here](https://sushantdhiman.com/projects/r
 | hourStep            | Number             | 1             |
 | minuteStep          | Number             | 1             |
 | secondStep          | Number             | 1             |
-| inputReadOnly       | Boolean            | false         |

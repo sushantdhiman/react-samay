@@ -7,7 +7,8 @@ import { noop } from './helpers';
 import Panel from './Panel';
 
 const Wrapper = styled.div`
-  display: flex;
+  position: relative;
+  display: inline-block;
 `;
 
 type Props = {
@@ -25,7 +26,6 @@ type Props = {
   hourStep: number;
   id: string;
   inputClassName: string;
-  inputReadOnly: boolean;
   minuteStep: number;
   name: string;
   onAmPmChange: (ampm: string) => void;
@@ -33,7 +33,6 @@ type Props = {
   onChange: (value: Date) => void;
   onClose: (value: { open: false }) => void;
   onFocus: () => void;
-  onKeyDown: () => void;
   onOpen: (value: { open: true }) => void;
   open: boolean;
   placeholder: string;
@@ -52,7 +51,6 @@ const defaultProps: Partial<Props> = {
   disabled: false,
   prefixCls: 'react-samay',
   defaultOpen: false,
-  inputReadOnly: false,
   className: '',
   inputClassName: '',
   placeholder: '',
@@ -71,7 +69,6 @@ const defaultProps: Partial<Props> = {
   onClose: noop,
   onFocus: noop,
   onBlur: noop,
-  onKeyDown: noop,
   getAriaLabel: () => 'react-samay-input-time',
 };
 
@@ -150,7 +147,6 @@ export default class Picker extends Component<
   }
 
   onClick() {
-    if (this.props.onFocus) this.props.onFocus();
     this.setOpen(true);
   }
 
@@ -229,7 +225,6 @@ export default class Picker extends Component<
       disabledMinutes,
       disabledSeconds,
       hideDisabledOptions,
-      inputReadOnly,
       showHour,
       showMinute,
       showSecond,
@@ -237,7 +232,6 @@ export default class Picker extends Component<
       use12Hours,
       onFocus,
       onBlur,
-      onKeyDown,
       hourStep,
       minuteStep,
       secondStep,
@@ -252,25 +246,32 @@ export default class Picker extends Component<
         style={style}
         className={cx(`${prefixCls}-wrapper`, className)}
       >
-        {open ? (
+        <input
+          type="text"
+          name={name}
+          className={cx(`${prefixCls}-input`, inputClassName)}
+          ref={this.saveInputRef}
+          placeholder={placeholder}
+          disabled={disabled}
+          aria-label={getAriaLabel(strValue)}
+          value={strValue}
+          onChange={noop}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onClick={this.onClick}
+          onKeyDown={this.onKeyDown}
+        />
+        {open && (
           <Panel
-            name={name}
-            className={className}
-            inputClassName={inputClassName}
             prefixCls={`${prefixCls}-panel`}
             ref={this.savePanelRef}
             value={this.state.value}
-            inputReadOnly={inputReadOnly}
-            disabled={disabled}
-            onChange={this.onPanelChange}
-            onAmPmChange={this.onAmPmChange}
             defaultOpenValue={defaultOpenValue}
             showHour={showHour}
             showMinute={showMinute}
             showSecond={showSecond}
             closePanel={this.closePanel}
             format={this.getFormat()}
-            placeholder={placeholder}
             disabledHours={disabledHours}
             disabledMinutes={disabledMinutes}
             disabledSeconds={disabledSeconds}
@@ -279,24 +280,8 @@ export default class Picker extends Component<
             hourStep={hourStep}
             minuteStep={minuteStep}
             secondStep={secondStep}
-            onKeyDown={onKeyDown}
-          />
-        ) : (
-          <input
-            type="text"
-            name={name}
-            className={cx(`${prefixCls}-input`, inputClassName)}
-            ref={this.saveInputRef}
-            placeholder={placeholder}
-            disabled={disabled}
-            readOnly={!!inputReadOnly}
-            aria-label={getAriaLabel(strValue)}
-            value={strValue}
-            onChange={noop}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onClick={this.onClick}
-            onKeyDown={this.onKeyDown}
+            onChange={this.onPanelChange}
+            onAmPmChange={this.onAmPmChange}
           />
         )}
       </Wrapper>

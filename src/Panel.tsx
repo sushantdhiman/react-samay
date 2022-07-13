@@ -1,28 +1,15 @@
 import React, { Component } from 'react';
-import cx from 'classnames';
-import styled from 'styled-components';
 import FocusTrap from 'focus-trap-react';
 import { getHours, getMinutes } from 'date-fns';
 
-import Header from './Header';
 import Combobox from './Combobox';
 import { generateOptions, toNearestValidTime, noop } from './helpers';
 
-const Wrapper = styled.div`
-  position: relative;
-`;
-
 type Props = {
-  name: string;
   prefixCls: string;
-  className: string;
-  inputClassName: string;
   defaultOpenValue: Date;
   value: Date;
-  placeholder: string;
   format: string;
-  inputReadOnly: boolean;
-  disabled?: boolean;
   disabledHours: () => number[];
   disabledMinutes: (hour: number | null) => number[];
   disabledSeconds: (hour: number | null, minute: number | null) => number[];
@@ -37,21 +24,17 @@ type Props = {
   hourStep: number;
   minuteStep: number;
   secondStep: number;
-  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 class Panel extends Component<Props, { value: Date }> {
   static defaultProps = {
-    prefixCls: 'react-samay-panel',
     onChange: noop,
     disabledHours: noop,
     disabledMinutes: noop,
     disabledSeconds: noop,
     defaultOpenValue: new Date(),
     use12Hours: false,
-    onKeyDown: noop,
     onAmPmChange: noop,
-    inputReadOnly: false,
   };
 
   constructor(props: Props) {
@@ -110,12 +93,7 @@ class Panel extends Component<Props, { value: Date }> {
 
   render() {
     const {
-      name,
       prefixCls,
-      className,
-      inputClassName,
-      placeholder,
-      disabled,
       disabledMinutes,
       disabledSeconds,
       hideDisabledOptions,
@@ -126,11 +104,9 @@ class Panel extends Component<Props, { value: Date }> {
       defaultOpenValue,
       closePanel,
       use12Hours,
-      onKeyDown,
       hourStep,
       minuteStep,
       secondStep,
-      inputReadOnly,
     } = this.props;
     const { value } = this.state;
     const disabledHourOptions = this.disabledHours();
@@ -176,26 +152,7 @@ class Panel extends Component<Props, { value: Date }> {
           escapeDeactivates: true,
         }}
       >
-        <Wrapper className={cx(className, `${prefixCls}-inner`)}>
-          <Header
-            name={name}
-            prefixCls={prefixCls}
-            inputClassName={inputClassName}
-            defaultOpenValue={validDefaultOpenValue}
-            value={value}
-            format={format}
-            disabled={disabled}
-            placeholder={placeholder}
-            hourOptions={hourOptions}
-            minuteOptions={minuteOptions}
-            secondOptions={secondOptions}
-            disabledHours={this.disabledHours}
-            disabledMinutes={disabledMinutes}
-            disabledSeconds={disabledSeconds}
-            onChange={this.onChange}
-            onKeyDown={onKeyDown}
-            inputReadOnly={inputReadOnly}
-          />
+        <div className={`${prefixCls}-inner`}>
           <Combobox
             prefixCls={prefixCls}
             value={value}
@@ -215,7 +172,7 @@ class Panel extends Component<Props, { value: Date }> {
             use12Hours={use12Hours}
             isAM={this.isAM()}
           />
-        </Wrapper>
+        </div>
       </FocusTrap>
     );
   }

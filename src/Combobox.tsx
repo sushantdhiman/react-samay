@@ -8,11 +8,12 @@ import { formatOption } from './helpers';
 import type { Selector } from './interface';
 
 const Columns = styled.div`
-  display: flex;
-  flex-direction: row;
   position: absolute;
   z-index: 100;
   width: 100%;
+
+  display: flex;
+  flex-direction: row;
   background-color: white;
   border-radius: 4px;
   border-left: 1px solid #ccc;
@@ -25,6 +26,8 @@ type Props = {
   defaultOpenValue: Date;
   prefixCls: string;
   value: Date;
+  use12Hours: boolean;
+  isAM: boolean;
   onChange: (value: Date) => void;
   onAmPmChange: (ampm: string) => void;
   showHour: boolean;
@@ -36,8 +39,6 @@ type Props = {
   disabledHours: () => number[];
   disabledMinutes: (hour: number | null) => number[];
   disabledSeconds: (hour: number | null, minute: number | null) => number[];
-  use12Hours: boolean;
-  isAM: boolean;
 };
 
 class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
