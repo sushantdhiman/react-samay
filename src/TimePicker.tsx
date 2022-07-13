@@ -141,7 +141,7 @@ export default class Picker extends Component<
   }
 
   onKeyDown(e: KeyboardEvent) {
-    if ([13, 32, 40].indexOf(e.keyCode) >= 0) {
+    if ([8, 13, 32, 40].indexOf(e.keyCode) >= 0) {
       this.setOpen(true);
     }
   }
