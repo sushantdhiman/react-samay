@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FocusTrap from 'focus-trap-react';
-import { getHours, getMinutes } from 'date-fns';
+import getHours from 'date-fns/getHours';
+import getMinutes from 'date-fns/getMinutes';
 
 import Combobox from './Combobox';
 import { generateOptions, toNearestValidTime, noop } from './helpers';

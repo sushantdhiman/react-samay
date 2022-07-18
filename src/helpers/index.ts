@@ -1,5 +1,8 @@
 import raf from 'raf';
-import { getHours, getMinutes, getSeconds, parse } from 'date-fns';
+import getHours from 'date-fns/getHours';
+import getMinutes from 'date-fns/getMinutes';
+import getSeconds from 'date-fns/getSeconds';
+import parse from 'date-fns/parse';
 
 export function noop(): void {
   /* empty noop function */

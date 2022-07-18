@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { set, getHours, getMinutes, getSeconds } from 'date-fns';
+import set from 'date-fns/set';
+import getHours from 'date-fns/getHours';
+import getMinutes from 'date-fns/getMinutes';
+import getSeconds from 'date-fns/getSeconds';
 
 import Select from './Select';
 import { formatOption } from './helpers';
