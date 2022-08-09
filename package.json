@@ -20,18 +20,18 @@
     "tsc": "npx tsc"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "^2.6.2",
-    "@parcel/transformer-typescript-types": "^2.6.2",
-    "@storybook/react": "^6.5.9",
+    "@parcel/packager-ts": "^2.7.0",
+    "@parcel/transformer-typescript-types": "^2.7.0",
+    "@storybook/react": "^6.5.10",
     "@types/raf": "^3.4.0",
     "@types/react": "^18.x",
     "@types/react-dom": "^18.x",
     "@types/styled-components": "^5.1.25",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.30.1",
-    "parcel": "^2.6.2",
+    "parcel": "^2.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.7.4"
@@ -42,10 +42,10 @@
   },
   "dependencies": {
     "classnames": "^2.3.1",
-    "date-fns": "^2.28.0",
+    "date-fns": "^2.29.1",
     "focus-trap-react": "^9.0.2",
     "raf": "^3.4.1",
-    "styled-components": "^5.3.0"
+    "styled-components": "^5.3.5"
   },
   "keywords": [
     "react",
