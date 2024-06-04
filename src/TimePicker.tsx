@@ -1,7 +1,7 @@
 import React, { Component, KeyboardEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import cx from 'classnames';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 import { noop } from './helpers';
 import Panel from './Panel';

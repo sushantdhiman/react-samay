@@ -1,5 +1,4 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { startOfDay } from 'date-fns';
 
 import { Wrapper } from './helper';
@@ -31,10 +30,20 @@ function WithReset() {
   );
 }
 
-storiesOf('Timepicker/Interaction', module)
-  .addDecorator((Story) => (
-    <Wrapper>
-      <Story />
-    </Wrapper>
-  ))
-  .add('changing values', () => <WithReset />);
+export default {
+  title: 'Timepicker/Interaction',
+
+  decorators: [
+    (Story: React.ElementType) => (
+      <Wrapper>
+        <Story />
+      </Wrapper>
+    ),
+  ],
+};
+
+export const ChangingValues = () => <WithReset />;
+
+ChangingValues.story = {
+  name: 'changing values',
+};

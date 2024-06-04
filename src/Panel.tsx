@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FocusTrap from 'focus-trap-react';
-import getHours from 'date-fns/getHours';
-import getMinutes from 'date-fns/getMinutes';
+import { getHours } from 'date-fns/getHours';
+import { getMinutes } from 'date-fns/getMinutes';
 
 import Combobox from './Combobox';
 import { generateOptions, toNearestValidTime, noop } from './helpers';
@@ -112,36 +112,36 @@ class Panel extends Component<Props, { value: Date }> {
     const { value } = this.state;
     const disabledHourOptions = this.disabledHours();
     const disabledMinuteOptions = disabledMinutes(
-      value ? getHours(value) : null
+      value ? getHours(value) : null,
     );
     const disabledSecondOptions = disabledSeconds(
       value ? getHours(value) : null,
-      value ? getMinutes(value) : null
+      value ? getMinutes(value) : null,
     );
     const hourOptions = generateOptions(
       24,
       disabledHourOptions,
       hideDisabledOptions,
-      hourStep
+      hourStep,
     );
     const minuteOptions = generateOptions(
       60,
       disabledMinuteOptions,
       hideDisabledOptions,
-      minuteStep
+      minuteStep,
     );
     const secondOptions = generateOptions(
       60,
       disabledSecondOptions,
       hideDisabledOptions,
-      secondStep
+      secondStep,
     );
 
     const validDefaultOpenValue = toNearestValidTime(
       defaultOpenValue,
       hourOptions,
       minuteOptions,
-      secondOptions
+      secondOptions,
     );
 
     return (

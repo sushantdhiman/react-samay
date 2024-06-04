@@ -1,8 +1,8 @@
 import raf from 'raf';
-import getHours from 'date-fns/getHours';
-import getMinutes from 'date-fns/getMinutes';
-import getSeconds from 'date-fns/getSeconds';
-import parse from 'date-fns/parse';
+import { getHours } from 'date-fns/getHours';
+import { getMinutes } from 'date-fns/getMinutes';
+import { getSeconds } from 'date-fns/getSeconds';
+import { parse } from 'date-fns/parse';
 
 export function noop(): void {
   /* empty noop function */
@@ -49,7 +49,7 @@ export function generateOptions(
   length: number,
   disabledOptions: number[],
   hideDisabledOptions: boolean,
-  step = 1
+  step = 1,
 ) {
   const arr = [];
   for (let value = 0; value < length; value += step) {
@@ -64,22 +64,22 @@ export function toNearestValidTime(
   time: Date,
   hourOptions: number[],
   minuteOptions: number[],
-  secondOptions: number[]
+  secondOptions: number[],
 ): Date {
   const hour = hourOptions
     .slice()
     .sort(
-      (a, b) => Math.abs(getHours(time) - a) - Math.abs(getHours(time) - b)
+      (a, b) => Math.abs(getHours(time) - a) - Math.abs(getHours(time) - b),
     )[0];
   const minute = minuteOptions
     .slice()
     .sort(
-      (a, b) => Math.abs(getMinutes(time) - a) - Math.abs(getMinutes(time) - b)
+      (a, b) => Math.abs(getMinutes(time) - a) - Math.abs(getMinutes(time) - b),
     )[0];
   const second = secondOptions
     .slice()
     .sort(
-      (a, b) => Math.abs(getSeconds(time) - a) - Math.abs(getSeconds(time) - b)
+      (a, b) => Math.abs(getSeconds(time) - a) - Math.abs(getSeconds(time) - b),
     )[0];
 
   return parse(`${hour}:${minute}:${second}`, 'HH:mm:ss', new Date());

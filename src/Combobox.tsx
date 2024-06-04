@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import set from 'date-fns/set';
-import getHours from 'date-fns/getHours';
-import getMinutes from 'date-fns/getMinutes';
-import getSeconds from 'date-fns/getSeconds';
+import { set } from 'date-fns/set';
+import { getHours } from 'date-fns/getHours';
+import { getMinutes } from 'date-fns/getMinutes';
+import { getSeconds } from 'date-fns/getSeconds';
 
 import Select from './Select';
 import { formatOption } from './helpers';
@@ -101,7 +101,7 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
         hours: hour,
         minutes: minute,
         seconds: second,
-      })
+      }),
     );
   }
 
@@ -130,7 +130,7 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
       <Select
         prefixCls={prefixCls}
         options={hourOptionsAdj.map((option) =>
-          formatOption(option, disabledOptions)
+          formatOption(option, disabledOptions),
         )}
         selectedIndex={hourOptionsAdj.indexOf(hourAdj)}
         type="hour"
@@ -161,7 +161,7 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
       <Select
         prefixCls={prefixCls}
         options={minuteOptions.map((option) =>
-          formatOption(option, disabledOptions)
+          formatOption(option, disabledOptions),
         )}
         selectedIndex={minuteOptions.indexOf(minute)}
         type="minute"
@@ -192,7 +192,7 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
       <Select
         prefixCls={prefixCls}
         options={secondOptions.map((option) =>
-          formatOption(option, disabledOptions)
+          formatOption(option, disabledOptions),
         )}
         selectedIndex={secondOptions.indexOf(second)}
         type="second"
