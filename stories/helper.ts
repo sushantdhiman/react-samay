@@ -1,11 +1,3 @@
-import styled from 'styled-components';
-
-export const Wrapper = styled.div`
-  /* System font stack */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-`;
-
 export function generateOptions(length: number, excludedOptions: number[]) {
   const arr = [];
   for (let value = 0; value < length; value += 1) {

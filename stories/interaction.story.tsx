@@ -1,7 +1,5 @@
 import React from 'react';
 import { startOfDay } from 'date-fns';
-
-import { Wrapper } from './helper';
 import { TimePicker } from '../src/';
 
 function WithReset() {
@@ -32,14 +30,7 @@ function WithReset() {
 
 export default {
   title: 'Timepicker/Interaction',
-
-  decorators: [
-    (Story: React.ElementType) => (
-      <Wrapper>
-        <Story />
-      </Wrapper>
-    ),
-  ],
+  decorators: [],
 };
 
 export const ChangingValues = () => <WithReset />;

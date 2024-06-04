@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { TimePicker } from '../src/';
+
 import {
-  Wrapper,
   onChange,
   disabledHours,
   disabledMinutes,
@@ -11,14 +11,7 @@ import {
 
 export default {
   title: 'Timepicker/Basics',
-
-  decorators: [
-    (Story: React.ElementType) => (
-      <Wrapper>
-        <Story />
-      </Wrapper>
-    ),
-  ],
+  decorators: [],
 };
 
 export const Readme = () => {
