@@ -1,69 +1,8 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import cx from 'classnames';
 
 import type { Selector } from './interface';
 import { scrollTo, noop } from './helpers';
-
-const Column = styled.div`
-  flex: 1;
-
-  /*
-   * position relative needed to make offsetTop work
-   * used in scrolling to selected option
-   */
-  position: relative;
-  overflow-y: auto;
-  max-height: 12em;
-  border: 1px solid #e9e9e9;
-
-  scrollbar-width: 8px;
-
-  &:first-child {
-    border-left: 0;
-  }
-
-  &:last-child {
-    border-right: 0;
-  }
-
-  ul {
-    list-style: none;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-
-  li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-
-    &:hover {
-      background: #edfaff;
-    }
-
-    &.${({ className }) => className + '-option-selected'} {
-      background: #f7f7f7;
-      font-weight: bold;
-    }
-
-    &.${({ className }) => className + '-option-disabled'} {
-      color: #ccc;
-      &:hover {
-        background: transparent;
-        cursor: not-allowed;
-      }
-    }
-  }
-`;
 
 type Props = {
   prefixCls: string;
@@ -241,7 +180,7 @@ class Select extends Component<Props> {
     }
 
     return (
-      <Column
+      <div
         className={`${prefixCls}-select`}
         onKeyDown={this.handleKeyDown}
         ref={this.selectRef}
@@ -249,7 +188,7 @@ class Select extends Component<Props> {
         <ul role="radiogroup" aria-label={`Select ${label}`} ref={this.listRef}>
           {this.getOptions()}
         </ul>
-      </Column>
+      </div>
     );
   }
 }

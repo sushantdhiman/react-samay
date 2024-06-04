@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { set } from 'date-fns/set';
 import { getHours } from 'date-fns/getHours';
 import { getMinutes } from 'date-fns/getMinutes';
@@ -9,20 +8,6 @@ import Select from './Select';
 import { formatOption } from './helpers';
 
 import type { Selector } from './interface';
-
-const Columns = styled.div`
-  position: absolute;
-  z-index: 100;
-  width: 100%;
-
-  display: flex;
-  flex-direction: row;
-  background-color: white;
-  border-radius: 4px;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  margin-left: -1px;
-`;
 
 type Props = {
   format: string;
@@ -281,12 +266,12 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
     const { prefixCls, defaultOpenValue, value: propValue } = this.props;
     const value = propValue || defaultOpenValue;
     return (
-      <Columns className={`${prefixCls}-combobox`}>
+      <div className={`${prefixCls}-combobox`}>
         {this.getHourSelect(getHours(value))}
         {this.getMinuteSelect(getMinutes(value))}
         {this.getSecondSelect(getSeconds(value))}
         {this.getAMPMSelect()}
-      </Columns>
+      </div>
     );
   }
 }

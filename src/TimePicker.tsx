@@ -1,15 +1,9 @@
 import React, { Component, KeyboardEvent, RefObject } from 'react';
-import styled from 'styled-components';
 import cx from 'classnames';
 import { format } from 'date-fns/format';
 
 import { noop } from './helpers';
 import Panel from './Panel';
-
-const Wrapper = styled.div`
-  position: relative;
-  display: inline-block;
-`;
 
 type Props = {
   className: string;
@@ -241,7 +235,7 @@ export default class Picker extends Component<
     const strValue = (value && format(value, this.getFormat(use12Hours))) || '';
 
     return (
-      <Wrapper
+      <div
         id={id}
         style={style}
         className={cx(`${prefixCls}-wrapper`, className)}
@@ -284,7 +278,7 @@ export default class Picker extends Component<
             onAmPmChange={this.onAmPmChange}
           />
         )}
-      </Wrapper>
+      </div>
     );
   }
 }

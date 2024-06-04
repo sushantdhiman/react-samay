@@ -29,6 +29,9 @@ npm i --save react-samay
 import { TimePicker } from 'react-samay';
 import ReactDOM from 'react-dom';
 
+// import css file
+import 'react-samay/index.css';
+
 ReactDOM.render(
   <TimePicker
     value={new Date()}
@@ -36,7 +39,7 @@ ReactDOM.render(
       console.log(date);
     }}
   />,
-  <div id="app" />
+  <div id="app" />,
 );
 ```
 
