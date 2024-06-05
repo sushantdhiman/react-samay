@@ -1,7 +1,8 @@
 # Changelog
 
-## next
+## 2.0.0
 
+- change: esm export only
 - change: use `lightFormat`
 - change: provide pre-built css as `react-samay/index.css`
 - remove: styled-component
