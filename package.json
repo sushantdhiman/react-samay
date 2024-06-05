@@ -12,7 +12,10 @@
   "source": "./src/index.tsx",
   "types": "./types/index.d.ts",
   "module": "./lib/index.esm.js",
-  "exports": "./lib/index.esm.js",
+  "exports": {
+    ".": "./lib/index.esm.js",
+    "./index.css": "./index.css"
+  },
   "scripts": {
     "storybook": "storybook dev -c .storybook",
     "build-storybook": "storybook build -c .storybook -o .storybook-static",
