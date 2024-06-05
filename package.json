@@ -7,14 +7,15 @@
     "type": "git",
     "url": "https://github.com/sushantdhiman/react-samay"
   },
+  "type": "module",
   "license": "MIT",
   "source": "src/index.tsx",
-  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
   "types": "types/index.d.ts",
   "scripts": {
     "storybook": "storybook dev -c .storybook",
     "build-storybook": "storybook build -c .storybook -o .storybook-static",
-    "build": "parcel build",
+    "build": "rm -rf lib/* && parcel build",
     "prettier": "prettier --write './(src|stories)/**/*.+(ts|tsx)'",
     "lint": "eslint '{src,stories}/**/*.*'",
     "tsc": "npx tsc"
