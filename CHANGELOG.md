@@ -2,6 +2,7 @@
 
 ## next
 
+- change: use `lightFormat`
 - change: provide pre-built css as `react-samay/index.css`
 - remove: styled-component
 - change: update dependencies

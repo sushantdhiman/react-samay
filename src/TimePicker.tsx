@@ -1,6 +1,6 @@
 import React, { Component, KeyboardEvent, RefObject } from 'react';
 import cx from 'classnames';
-import { format } from 'date-fns/format';
+import { lightFormat } from 'date-fns/lightFormat';
 
 import { noop } from './helpers';
 import Panel from './Panel';
@@ -232,7 +232,8 @@ export default class Picker extends Component<
     } = this.props;
 
     const { open, value } = this.state;
-    const strValue = (value && format(value, this.getFormat(use12Hours))) || '';
+    const strValue =
+      (value && lightFormat(value, this.getFormat(use12Hours))) || '';
 
     return (
       <div

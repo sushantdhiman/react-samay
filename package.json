@@ -14,7 +14,7 @@
   "scripts": {
     "storybook": "storybook dev -c .storybook",
     "build-storybook": "storybook build -c .storybook -o .storybook-static",
-    "build": "parcel build && cp ./index.css lib/index.css",
+    "build": "parcel build",
     "prettier": "prettier --write './(src|stories)/**/*.+(ts|tsx)'",
     "lint": "eslint '{src,stories}/**/*.*'",
     "tsc": "npx tsc"
