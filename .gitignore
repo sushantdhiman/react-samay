@@ -3,3 +3,4 @@ lib
 types
 .parcel-cache
 .storybook-static
+*.tsbuildinfo

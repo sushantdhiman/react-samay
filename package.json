@@ -19,14 +19,17 @@
   "scripts": {
     "storybook": "storybook dev -c .storybook",
     "build-storybook": "storybook build -c .storybook -o .storybook-static",
-    "build": "rm -rf lib/* && parcel build",
+    "build": "rm -rf lib/* && rollup -c && npm run types",
+    "types": "rm -rf types/* && rm -rf lib/stories && mv lib/src/* types/",
     "prettier": "prettier --write './(src|stories)/**/*.+(ts|tsx)'",
     "lint": "eslint '{src,stories}/**/*.*'",
     "tsc": "npx tsc"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "^2.12.0",
-    "@parcel/transformer-typescript-types": "^2.12.0",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
     "@storybook/addon-webpack5-compiler-swc": "^1.0.3",
     "@storybook/react": "^8.1.5",
     "@storybook/react-webpack5": "^8.1.5",
@@ -37,9 +40,10 @@
     "@typescript-eslint/parser": "^7.12.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.34.2",
-    "parcel": "^2.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "rollup": "^2.79.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "storybook": "^8.1.5",
     "typescript": "^5.4.5"
   },
