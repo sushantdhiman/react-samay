@@ -20,7 +20,7 @@
     "storybook": "storybook dev -c .storybook",
     "build-storybook": "storybook build -c .storybook -o .storybook-static",
     "build": "rm -rf lib/* && rollup -c && npm run types",
-    "types": "rm -rf types/* && rm -rf lib/stories && mv lib/src/* types/",
+    "types": "mkdir -p types && rm -rf types/* && rm -rf lib/stories && mv lib/src/* types/",
     "prettier": "prettier --write './(src|stories)/**/*.+(ts|tsx)'",
     "lint": "eslint '{src,stories}/**/*.*'",
     "tsc": "npx tsc"
