@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0
+
+- bundle: use rollup (with terser ecma:2022)
+- change: update dependencies
+
 ## 2.0.0
 
 - change: esm export only
