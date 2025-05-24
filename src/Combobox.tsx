@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useCallback } from 'react';
 import { set } from 'date-fns/set';
 import { getHours } from 'date-fns/getHours';
 import { getMinutes } from 'date-fns/getMinutes';
@@ -29,74 +29,115 @@ type Props = {
   disabledSeconds: (hour: number | null, minute: number | null) => number[];
 };
 
-class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
-  constructor(props: Props) {
-    super(props);
+function Combobox(props: Props) {
+  const [selectFocusOn, setSelectFocusOn] = useState<null | Selector>(null);
 
-    this.state = {
-      selectFocusOn: null,
-    };
+  const onItemChange = useCallback(
+    (type: Selector, itemValue: string) => {
+      const { onChange, defaultOpenValue, use12Hours, isAM, onAmPmChange } =
+        props;
+      const value = props.value || defaultOpenValue;
 
-    this.onItemChange = this.onItemChange.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.getColumns = this.getColumns.bind(this);
-  }
+      let hour = getHours(value);
+      let minute = getMinutes(value);
+      let second = getSeconds(value);
 
-  onItemChange(type: Selector, itemValue: string) {
-    const { onChange, defaultOpenValue, use12Hours, isAM, onAmPmChange } =
-      this.props;
-    const value = this.props.value || defaultOpenValue;
-
-    let hour = getHours(value);
-    let minute = getMinutes(value);
-    let second = getSeconds(value);
-
-    if (type === 'hour') {
-      if (use12Hours) {
-        if (isAM) {
-          hour = +itemValue % 12;
+      if (type === 'hour') {
+        if (use12Hours) {
+          if (isAM) {
+            hour = +itemValue % 12;
+          } else {
+            hour = (+itemValue % 12) + 12;
+          }
         } else {
-          hour = (+itemValue % 12) + 12;
+          hour = +itemValue;
         }
-      } else {
-        hour = +itemValue;
-      }
-    } else if (type === 'minute') {
-      minute = +itemValue;
-    } else if (type === 'ampm') {
-      const ampm = itemValue.toUpperCase();
-      if (use12Hours) {
-        if (ampm === 'PM' && hour < 12) {
-          hour = (hour % 12) + 12;
-        }
-
-        if (ampm === 'AM') {
-          if (hour >= 12) {
-            hour = hour - 12;
+      } else if (type === 'minute') {
+        minute = +itemValue;
+      } else if (type === 'ampm') {
+        const ampm = itemValue.toUpperCase();
+        if (use12Hours) {
+          if (ampm === 'PM' && hour < 12) {
+            hour = (hour % 12) + 12;
+          }
+          if (ampm === 'AM') {
+            if (hour >= 12) {
+              hour = hour - 12;
+            }
           }
         }
+        onAmPmChange(ampm);
+      } else {
+        second = +itemValue;
       }
-      onAmPmChange(ampm);
-    } else {
-      second = +itemValue;
-    }
 
-    onChange(
-      set(value, {
-        hours: hour,
-        minutes: minute,
-        seconds: second,
-      }),
-    );
-  }
+      onChange(
+        set(value, {
+          hours: hour,
+          minutes: minute,
+          seconds: second,
+        }),
+      );
+    },
+    [
+      props.onChange,
+      props.defaultOpenValue,
+      props.use12Hours,
+      props.isAM,
+      props.onAmPmChange,
+      props.value,
+    ],
+  );
 
-  getHourSelect(hour: number) {
+  const getColumns = useCallback(() => {
+    const { showHour, showMinute, showSecond, use12Hours } = props;
+    return [
+      ['hour', showHour],
+      ['minute', showMinute],
+      ['second', showSecond],
+      ['ampm', use12Hours],
+    ]
+      .filter(([, enabled]) => enabled)
+      .map(([val]) => val as Selector);
+  }, [props.showHour, props.showMinute, props.showSecond, props.use12Hours]);
+
+  const changeFocusTo = useCallback(
+    (currentSelectType: Selector, offset: number) => {
+      const columns = getColumns();
+      const currentIndex = columns.indexOf(currentSelectType);
+      let newIndex = currentIndex + offset;
+
+      if (newIndex < 0) {
+        newIndex = columns.length - 1;
+      } else if (newIndex >= columns.length) {
+        newIndex = 0;
+      }
+
+      const newFocusOn = columns[newIndex];
+      setSelectFocusOn(newFocusOn);
+    },
+    [getColumns],
+  );
+
+  const handleKeyDown = useCallback(
+    (currentType: Selector, e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.keyCode === 39) {
+        changeFocusTo(currentType, 1);
+        e.preventDefault();
+        e.stopPropagation();
+      } else if (e.keyCode === 37) {
+        changeFocusTo(currentType, -1);
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    [changeFocusTo],
+  );
+
+  const getHourSelect = (hour: number) => {
     const { prefixCls, hourOptions, disabledHours, showHour, use12Hours } =
-      this.props;
-
-    if (!showHour) {
-      return null;
-    }
+      props;
+    if (!showHour) return null;
 
     const disabledOptions = disabledHours();
 
@@ -120,14 +161,14 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
         selectedIndex={hourOptionsAdj.indexOf(hourAdj)}
         type="hour"
         label="hour"
-        onSelect={this.onItemChange}
-        onKeyDown={(e) => this.handleKeyDown('hour', e)}
-        focused={this.state.selectFocusOn === 'hour'}
+        onSelect={onItemChange}
+        onKeyDown={(e) => handleKeyDown('hour', e)}
+        focused={selectFocusOn === 'hour'}
       />
     );
-  }
+  };
 
-  getMinuteSelect(minute: number) {
+  const getMinuteSelect = (minute: number) => {
     const {
       prefixCls,
       minuteOptions,
@@ -135,10 +176,8 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
       defaultOpenValue,
       showMinute,
       value: propValue,
-    } = this.props;
-    if (!showMinute) {
-      return null;
-    }
+    } = props;
+    if (!showMinute) return null;
     const value = propValue || defaultOpenValue;
     const disabledOptions = disabledMinutes(getHours(value));
 
@@ -151,14 +190,14 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
         selectedIndex={minuteOptions.indexOf(minute)}
         type="minute"
         label="minute"
-        onSelect={this.onItemChange}
-        onKeyDown={(e) => this.handleKeyDown('minute', e)}
-        focused={this.state.selectFocusOn === 'minute'}
+        onSelect={onItemChange}
+        onKeyDown={(e) => handleKeyDown('minute', e)}
+        focused={selectFocusOn === 'minute'}
       />
     );
-  }
+  };
 
-  getSecondSelect(second: number) {
+  const getSecondSelect = (second: number) => {
     const {
       prefixCls,
       secondOptions,
@@ -166,10 +205,8 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
       showSecond,
       defaultOpenValue,
       value: propValue,
-    } = this.props;
-    if (!showSecond) {
-      return null;
-    }
+    } = props;
+    if (!showSecond) return null;
     const value = propValue || defaultOpenValue;
     const disabledOptions = disabledSeconds(getHours(value), getMinutes(value));
 
@@ -182,21 +219,18 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
         selectedIndex={secondOptions.indexOf(second)}
         type="second"
         label="second"
-        onSelect={this.onItemChange}
-        onKeyDown={(e) => this.handleKeyDown('second', e)}
-        focused={this.state.selectFocusOn === 'second'}
+        onSelect={onItemChange}
+        onKeyDown={(e) => handleKeyDown('second', e)}
+        focused={selectFocusOn === 'second'}
       />
     );
-  }
+  };
 
-  getAMPMSelect() {
-    const { prefixCls, use12Hours, format, isAM } = this.props;
+  const getAMPMSelect = () => {
+    const { prefixCls, use12Hours, format, isAM } = props;
+    if (!use12Hours) return null;
 
-    if (!use12Hours) {
-      return null;
-    }
-
-    const AMPMOptions = ['am', 'pm'] // If format has A char, then we should uppercase AM/PM
+    const AMPMOptions = ['am', 'pm']
       .map((c) => (format.match(/\sA/) ? c.toUpperCase() : c))
       .map((c) => ({ value: c, disabled: false }));
 
@@ -209,71 +243,24 @@ class Combobox extends Component<Props, { selectFocusOn: null | Selector }> {
         selectedIndex={selected}
         type="ampm"
         label="AM or PM"
-        onSelect={this.onItemChange}
-        onKeyDown={(e) => this.handleKeyDown('ampm', e)}
-        focused={this.state.selectFocusOn === 'ampm'}
+        onSelect={onItemChange}
+        onKeyDown={(e) => handleKeyDown('ampm', e)}
+        focused={selectFocusOn === 'ampm'}
       />
     );
-  }
+  };
 
-  handleKeyDown(currentType: Selector, e: React.KeyboardEvent<HTMLElement>) {
-    if (e.keyCode === 39) {
-      // right arrow
-      this.changeFocusTo(currentType, 1);
-      e.preventDefault();
-      e.stopPropagation();
-    } else if (e.keyCode === 37) {
-      // left arrow
-      this.changeFocusTo(currentType, -1);
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }
+  const { prefixCls, defaultOpenValue, value: propValue } = props;
+  const value = propValue || defaultOpenValue;
 
-  getColumns() {
-    // get list of enabled columns (e.g. ['hour', 'minute', 'ampm'])
-    const { showHour, showMinute, showSecond, use12Hours } = this.props;
-
-    return [
-      ['hour', showHour],
-      ['minute', showMinute],
-      ['second', showSecond],
-      ['ampm', use12Hours],
-    ]
-      .filter(([, enabled]) => enabled)
-      .map(([val]) => val as Selector);
-  }
-
-  changeFocusTo(currentSelectType: Selector, offset: number) {
-    const columns = this.getColumns();
-
-    const currentIndex = columns.indexOf(currentSelectType);
-    let newIndex = currentIndex + offset;
-
-    // bounds + wrap
-    if (newIndex < 0) {
-      newIndex = columns.length - 1;
-    } else if (newIndex >= columns.length) {
-      newIndex = 0;
-    }
-
-    const newFocusOn = columns[newIndex];
-
-    this.setState({ selectFocusOn: newFocusOn });
-  }
-
-  render() {
-    const { prefixCls, defaultOpenValue, value: propValue } = this.props;
-    const value = propValue || defaultOpenValue;
-    return (
-      <div className={`${prefixCls}-combobox`}>
-        {this.getHourSelect(getHours(value))}
-        {this.getMinuteSelect(getMinutes(value))}
-        {this.getSecondSelect(getSeconds(value))}
-        {this.getAMPMSelect()}
-      </div>
-    );
-  }
+  return (
+    <div className={`${prefixCls}-combobox`}>
+      {getHourSelect(getHours(value))}
+      {getMinuteSelect(getMinutes(value))}
+      {getSecondSelect(getSeconds(value))}
+      {getAMPMSelect()}
+    </div>
+  );
 }
 
 export default Combobox;

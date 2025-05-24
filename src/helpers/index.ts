@@ -8,6 +8,10 @@ export function noop(): void {
   /* empty noop function */
 }
 
+export function noopDisabled(): number[] {
+  return [];
+}
+
 export function scrollTo(element: HTMLElement, to: number, duration: number) {
   // jump to target if duration zero
   if (duration <= 0) {

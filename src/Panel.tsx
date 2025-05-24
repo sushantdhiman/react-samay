@@ -1,10 +1,15 @@
-import React, { Component } from 'react';
-import FocusTrap from 'focus-trap-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { FocusTrap } from 'focus-trap-react';
 import { getHours } from 'date-fns/getHours';
 import { getMinutes } from 'date-fns/getMinutes';
 
 import Combobox from './Combobox';
-import { generateOptions, toNearestValidTime, noop } from './helpers';
+import {
+  generateOptions,
+  toNearestValidTime,
+  noop,
+  noopDisabled,
+} from './helpers';
 
 type Props = {
   prefixCls: string;
@@ -27,54 +32,60 @@ type Props = {
   secondStep: number;
 };
 
-class Panel extends Component<Props, { value: Date }> {
-  static defaultProps = {
-    onChange: noop,
-    disabledHours: noop,
-    disabledMinutes: noop,
-    disabledSeconds: noop,
-    defaultOpenValue: new Date(),
-    use12Hours: false,
-    onAmPmChange: noop,
-  };
+function Panel({
+  prefixCls,
+  defaultOpenValue = new Date(),
+  value,
+  format,
+  disabledHours = noopDisabled,
+  disabledMinutes = noopDisabled,
+  disabledSeconds = noopDisabled,
+  hideDisabledOptions,
+  onChange = noop,
+  onAmPmChange = noop,
+  closePanel,
+  showHour,
+  showMinute,
+  showSecond,
+  use12Hours = false,
+  hourStep,
+  minuteStep,
+  secondStep,
+}: Props) {
+  const [internalValue, setInternalValue] = useState<Date>(value);
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      value: props.value,
-    };
-
-    this.onChange = this.onChange.bind(this);
-    this.onAmPmChange = this.onAmPmChange.bind(this);
-    this.disabledHours = this.disabledHours.bind(this);
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps: Props) {
-    const value = nextProps.value;
+  // Sync prop value to local state
+  useEffect(() => {
     if (value) {
-      this.setState({
-        value,
-      });
+      setInternalValue(value);
     }
-  }
+  }, [value]);
 
-  onChange(newValue: Date) {
-    const { onChange } = this.props;
-    this.setState({ value: newValue });
-    onChange(newValue);
-  }
+  const handleChange = useCallback(
+    (newValue: Date) => {
+      setInternalValue(newValue);
+      onChange(newValue);
+    },
+    [onChange],
+  );
 
-  onAmPmChange(ampm: string) {
-    const { onAmPmChange } = this.props;
-    onAmPmChange(ampm);
-  }
+  const handleAmPmChange = useCallback(
+    (ampm: string) => {
+      onAmPmChange(ampm);
+    },
+    [onAmPmChange],
+  );
 
-  disabledHours() {
-    const { use12Hours, disabledHours } = this.props;
+  const isAM = useCallback(() => {
+    const realValue = internalValue || defaultOpenValue;
+    const hours = getHours(realValue);
+    return hours >= 0 && hours < 12;
+  }, [internalValue, defaultOpenValue]);
+
+  const getDisabledHours = useCallback(() => {
     let disabledOptions = disabledHours();
-
     if (use12Hours && Array.isArray(disabledOptions)) {
-      if (this.isAM()) {
+      if (isAM()) {
         disabledOptions = disabledOptions
           .filter((h) => h < 12)
           .map((h) => (h === 0 ? 12 : h));
@@ -83,100 +94,74 @@ class Panel extends Component<Props, { value: Date }> {
       }
     }
     return disabledOptions;
-  }
+  }, [use12Hours, disabledHours, isAM]);
 
-  isAM() {
-    const realValue = this.state.value || this.props.defaultOpenValue;
-    const hours = getHours(realValue);
+  const disabledHourOptions = getDisabledHours();
+  const disabledMinuteOptions = disabledMinutes(
+    internalValue ? getHours(internalValue) : null,
+  );
+  const disabledSecondOptions = disabledSeconds(
+    internalValue ? getHours(internalValue) : null,
+    internalValue ? getMinutes(internalValue) : null,
+  );
+  const hourOptions = generateOptions(
+    24,
+    disabledHourOptions,
+    hideDisabledOptions,
+    hourStep,
+  );
+  const minuteOptions = generateOptions(
+    60,
+    disabledMinuteOptions,
+    hideDisabledOptions,
+    minuteStep,
+  );
+  const secondOptions = generateOptions(
+    60,
+    disabledSecondOptions,
+    hideDisabledOptions,
+    secondStep,
+  );
 
-    return hours >= 0 && hours < 12;
-  }
+  const validDefaultOpenValue = toNearestValidTime(
+    defaultOpenValue,
+    hourOptions,
+    minuteOptions,
+    secondOptions,
+  );
 
-  render() {
-    const {
-      prefixCls,
-      disabledMinutes,
-      disabledSeconds,
-      hideDisabledOptions,
-      showHour,
-      showMinute,
-      showSecond,
-      format,
-      defaultOpenValue,
-      closePanel,
-      use12Hours,
-      hourStep,
-      minuteStep,
-      secondStep,
-    } = this.props;
-    const { value } = this.state;
-    const disabledHourOptions = this.disabledHours();
-    const disabledMinuteOptions = disabledMinutes(
-      value ? getHours(value) : null,
-    );
-    const disabledSecondOptions = disabledSeconds(
-      value ? getHours(value) : null,
-      value ? getMinutes(value) : null,
-    );
-    const hourOptions = generateOptions(
-      24,
-      disabledHourOptions,
-      hideDisabledOptions,
-      hourStep,
-    );
-    const minuteOptions = generateOptions(
-      60,
-      disabledMinuteOptions,
-      hideDisabledOptions,
-      minuteStep,
-    );
-    const secondOptions = generateOptions(
-      60,
-      disabledSecondOptions,
-      hideDisabledOptions,
-      secondStep,
-    );
-
-    const validDefaultOpenValue = toNearestValidTime(
-      defaultOpenValue,
-      hourOptions,
-      minuteOptions,
-      secondOptions,
-    );
-
-    return (
-      <FocusTrap
-        focusTrapOptions={{
-          initialFocus: `.${prefixCls}-select-option-selected`,
-          onDeactivate: () => closePanel(),
-          clickOutsideDeactivates: true,
-          escapeDeactivates: true,
-        }}
-      >
-        <div className={`${prefixCls}-inner`}>
-          <Combobox
-            prefixCls={prefixCls}
-            value={value}
-            defaultOpenValue={validDefaultOpenValue}
-            format={format}
-            onChange={this.onChange}
-            onAmPmChange={this.onAmPmChange}
-            showHour={showHour}
-            showMinute={showMinute}
-            showSecond={showSecond}
-            hourOptions={hourOptions}
-            minuteOptions={minuteOptions}
-            secondOptions={secondOptions}
-            disabledHours={this.disabledHours}
-            disabledMinutes={disabledMinutes}
-            disabledSeconds={disabledSeconds}
-            use12Hours={use12Hours}
-            isAM={this.isAM()}
-          />
-        </div>
-      </FocusTrap>
-    );
-  }
+  return (
+    <FocusTrap
+      focusTrapOptions={{
+        initialFocus: `.${prefixCls}-select-option-selected`,
+        onDeactivate: () => closePanel(),
+        clickOutsideDeactivates: true,
+        escapeDeactivates: true,
+      }}
+    >
+      <div className={`${prefixCls}-inner`}>
+        <Combobox
+          prefixCls={prefixCls}
+          value={internalValue}
+          defaultOpenValue={validDefaultOpenValue}
+          format={format}
+          onChange={handleChange}
+          onAmPmChange={handleAmPmChange}
+          showHour={showHour}
+          showMinute={showMinute}
+          showSecond={showSecond}
+          hourOptions={hourOptions}
+          minuteOptions={minuteOptions}
+          secondOptions={secondOptions}
+          disabledHours={getDisabledHours}
+          disabledMinutes={disabledMinutes}
+          disabledSeconds={disabledSeconds}
+          use12Hours={use12Hours}
+          isAM={isAM()}
+        />
+      </div>
+    </FocusTrap>
+  );
 }
 
-export default Panel;
+export default React.forwardRef(Panel);

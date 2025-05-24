@@ -1,43 +1,49 @@
-import React, { Component, KeyboardEvent, RefObject } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  KeyboardEvent,
+  CSSProperties,
+} from 'react';
 import cx from 'classnames';
 import { lightFormat } from 'date-fns/lightFormat';
 
-import { noop } from './helpers';
+import { noop, noopDisabled } from './helpers';
 import Panel from './Panel';
 
 type Props = {
-  className: string;
-  defaultOpen: boolean;
-  defaultOpenValue: Date;
-  defaultValue: Date;
+  className?: string;
+  defaultOpen?: boolean;
+  defaultOpenValue?: Date;
+  defaultValue?: Date;
   disabled?: boolean;
-  disabledHours: () => number[];
-  disabledMinutes: (hour: number | null) => number[];
-  disabledSeconds: (hour: number | null, minute: number | null) => number[];
-  format: string;
-  getAriaLabel: (value: string) => string;
-  hideDisabledOptions: boolean;
-  hourStep: number;
-  id: string;
-  inputClassName: string;
-  minuteStep: number;
-  name: string;
-  onAmPmChange: (ampm: string) => void;
-  onBlur: () => void;
-  onChange: (value: Date) => void;
-  onClose: (value: { open: false }) => void;
-  onFocus: () => void;
-  onOpen: (value: { open: true }) => void;
-  open: boolean;
-  placeholder: string;
-  prefixCls: string;
-  secondStep: number;
-  showHour: boolean;
-  showMinute: boolean;
-  showSecond: boolean;
-  style: React.CSSProperties;
-  use12Hours: boolean;
-  value: Date;
+  disabledHours?: () => number[];
+  disabledMinutes?: (hour: number | null) => number[];
+  disabledSeconds?: (hour: number | null, minute: number | null) => number[];
+  format?: string;
+  getAriaLabel?: (value: string) => string;
+  hideDisabledOptions?: boolean;
+  hourStep?: number;
+  id?: string;
+  inputClassName?: string;
+  minuteStep?: number;
+  name?: string;
+  onAmPmChange?: (ampm: string) => void;
+  onBlur?: () => void;
+  onChange?: (value: Date) => void;
+  onClose?: (value: { open: false }) => void;
+  onFocus?: () => void;
+  onOpen?: (value: { open: true }) => void;
+  open?: boolean;
+  placeholder?: string;
+  prefixCls?: string;
+  secondStep?: number;
+  showHour?: boolean;
+  showMinute?: boolean;
+  showSecond?: boolean;
+  style?: CSSProperties;
+  use12Hours?: boolean;
+  value?: Date;
 };
 
 const defaultProps: Partial<Props> = {
@@ -53,9 +59,12 @@ const defaultProps: Partial<Props> = {
   showHour: true,
   showMinute: true,
   showSecond: true,
-  disabledHours: () => [],
-  disabledMinutes: () => [],
-  disabledSeconds: () => [],
+  hourStep: 1,
+  minuteStep: 1,
+  secondStep: 1,
+  disabledHours: noopDisabled,
+  disabledMinutes: noopDisabled,
+  disabledSeconds: noopDisabled,
   hideDisabledOptions: false,
   onChange: noop,
   onAmPmChange: noop,
@@ -66,220 +75,163 @@ const defaultProps: Partial<Props> = {
   getAriaLabel: () => 'react-samay-input-time',
 };
 
-type PickerProps = typeof defaultProps & Props;
+type WithDefaultProps<T, D extends Partial<T>> = Omit<T, keyof D> &
+  Required<Pick<T, Extract<keyof T, keyof D>>>;
 
-export default class Picker extends Component<
-  PickerProps,
-  { value: Date; open: boolean }
-> {
-  static defaultProps: Partial<Props> = defaultProps;
+function TimePicker(props: Props) {
+  const {
+    id,
+    name,
+    disabled,
+    placeholder,
+    style,
+    prefixCls,
+    className,
+    inputClassName,
+    getAriaLabel,
+    disabledHours,
+    disabledMinutes,
+    disabledSeconds,
+    hideDisabledOptions,
+    showHour,
+    showMinute,
+    showSecond,
+    defaultOpenValue,
+    use12Hours,
+    onFocus,
+    onBlur,
+    hourStep,
+    minuteStep,
+    secondStep,
+    format,
+    onChange,
+    onOpen,
+    onClose,
+    onAmPmChange,
+  } = { ...defaultProps, ...props } as WithDefaultProps<
+    Props,
+    typeof defaultProps
+  >;
 
-  private saveInputRef: RefObject<HTMLInputElement>;
-  private savePanelRef: RefObject<Panel>;
+  const controlledValue = props.value;
+  const controlledOpen = props.open;
 
-  constructor(props: PickerProps) {
-    super(props);
-    this.saveInputRef = React.createRef();
-    this.savePanelRef = React.createRef();
+  const [value, setValue] = useState<Date>(props.defaultValue ?? new Date());
+  const [open, setOpen] = useState<boolean>(props.defaultOpen ?? false);
 
-    const {
-      defaultOpen,
-      defaultValue,
-      open = defaultOpen,
-      value = defaultValue,
-    } = props;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<typeof Panel>(null);
 
-    this.state = {
-      open,
-      value,
-    };
+  // Sync controlled value and open state
+  useEffect(() => {
+    if (controlledValue !== undefined) setValue(controlledValue);
+  }, [controlledValue]);
 
-    this.onPanelChange = this.onPanelChange.bind(this);
-    this.onAmPmChange = this.onAmPmChange.bind(this);
-    this.onVisibleChange = this.onVisibleChange.bind(this);
-    this.closePanel = this.closePanel.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onClick = this.onClick.bind(this);
-  }
+  useEffect(() => {
+    if (controlledOpen !== undefined) setOpen(controlledOpen);
+  }, [controlledOpen]);
 
-  UNSAFE_componentWillReceiveProps(nextProps: PickerProps) {
-    const { value, open } = nextProps;
+  const setValueInternal = (val: Date) => {
+    if (controlledValue === undefined) setValue(val);
+    if (onChange) onChange(val);
+  };
 
-    if ('value' in nextProps) {
-      this.setState({
-        value,
-      });
+  const setOpenInternal = (o: boolean) => {
+    if (open !== o) {
+      if (controlledOpen === undefined) {
+        setOpen(o);
+      }
+
+      if (o) {
+        if (onOpen) onOpen({ open: true });
+      } else {
+        if (onClose) onClose({ open: false });
+      }
     }
+  };
 
-    if (open !== undefined) {
-      this.setState({ open });
-    }
-  }
-
-  onPanelChange(value: Date) {
-    this.setValue(value);
-  }
-
-  onAmPmChange(ampm: string) {
-    const { onAmPmChange } = this.props;
-    onAmPmChange(ampm);
-  }
-
-  onVisibleChange(open: boolean) {
-    this.setOpen(open);
-  }
-
-  closePanel() {
-    this.setOpen(false);
-    this.focus();
-  }
-
-  onKeyDown(e: KeyboardEvent) {
-    if ([8, 13, 32, 40].indexOf(e.keyCode) >= 0) {
-      this.setOpen(true);
-    }
-  }
-
-  onClick() {
-    this.setOpen(true);
-  }
-
-  setValue(value: Date) {
-    const { onChange } = this.props;
-
-    if (!('value' in this.props)) {
-      this.setState({
-        value,
-      });
-    }
-
-    onChange(value);
-  }
-
-  getFormat(includeAMPM = true) {
-    const { format, showHour, showMinute, showSecond, use12Hours } = this.props;
-
+  const getFormat = (includeAMPM = true) => {
     if (format) return format;
-
     if (use12Hours) {
       const fmtString = [
         showHour ? 'h' : '',
         showMinute ? 'mm' : '',
         showSecond ? 'ss' : '',
       ]
-        .filter((item) => !!item)
+        .filter(Boolean)
         .join(':');
-
       return includeAMPM ? fmtString.concat(' a') : fmtString;
     }
-
     return [
       showHour ? 'HH' : '',
       showMinute ? 'mm' : '',
       showSecond ? 'ss' : '',
     ]
-      .filter((item) => !!item)
+      .filter(Boolean)
       .join(':');
-  }
+  };
 
-  setOpen(open: boolean) {
-    const { onOpen, onClose } = this.props;
-    const { open: currentOpen } = this.state;
+  const handlePanelChange = (val: Date) => setValueInternal(val);
+  const handleAmPmChange = (ampm: string) => onAmPmChange && onAmPmChange(ampm);
+  const closePanel = () => {
+    setOpenInternal(false);
+    inputRef.current?.focus();
+  };
 
-    if (currentOpen !== open) {
-      if (!('open' in this.props)) {
-        this.setState({ open });
-      }
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if ([8, 13, 32, 40].indexOf(e.keyCode) >= 0) setOpenInternal(true);
+  };
 
-      if (open) {
-        onOpen({ open });
-      } else {
-        onClose({ open });
-      }
-    }
-  }
+  const handleClick = () => setOpenInternal(true);
 
-  focus() {
-    const el = this.saveInputRef.current;
-    if (el) el.focus();
-  }
+  const strValue = value ? lightFormat(value, getFormat(use12Hours)) : '';
 
-  render() {
-    const {
-      id,
-      name,
-      disabled,
-      placeholder,
-      style,
-      prefixCls,
-      className,
-      inputClassName,
-      getAriaLabel,
-      disabledHours,
-      disabledMinutes,
-      disabledSeconds,
-      hideDisabledOptions,
-      showHour,
-      showMinute,
-      showSecond,
-      defaultOpenValue,
-      use12Hours,
-      onFocus,
-      onBlur,
-      hourStep,
-      minuteStep,
-      secondStep,
-    } = this.props;
-
-    const { open, value } = this.state;
-    const strValue =
-      (value && lightFormat(value, this.getFormat(use12Hours))) || '';
-
-    return (
-      <div
-        id={id}
-        style={style}
-        className={cx(`${prefixCls}-wrapper`, className)}
-      >
-        <input
-          type="text"
-          name={name}
-          className={cx(`${prefixCls}-input`, inputClassName)}
-          ref={this.saveInputRef}
-          placeholder={placeholder}
-          disabled={disabled}
-          aria-label={getAriaLabel(strValue)}
-          value={strValue}
-          onChange={noop}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          onClick={this.onClick}
-          onKeyDown={this.onKeyDown}
+  return (
+    <div
+      id={id}
+      style={style}
+      className={cx(`${prefixCls}-wrapper`, className)}
+    >
+      <input
+        type="text"
+        name={name}
+        className={cx(`${prefixCls}-input`, inputClassName)}
+        ref={inputRef}
+        placeholder={placeholder}
+        disabled={disabled}
+        aria-label={getAriaLabel ? getAriaLabel(strValue) : ''}
+        value={strValue}
+        onChange={noop}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+      />
+      {open && (
+        <Panel
+          prefixCls={`${prefixCls}-panel`}
+          ref={panelRef}
+          value={value}
+          defaultOpenValue={defaultOpenValue}
+          showHour={showHour}
+          showMinute={showMinute}
+          showSecond={showSecond}
+          closePanel={closePanel}
+          format={getFormat()}
+          disabledHours={disabledHours}
+          disabledMinutes={disabledMinutes}
+          disabledSeconds={disabledSeconds}
+          hideDisabledOptions={hideDisabledOptions}
+          use12Hours={use12Hours}
+          hourStep={hourStep}
+          minuteStep={minuteStep}
+          secondStep={secondStep}
+          onChange={handlePanelChange}
+          onAmPmChange={handleAmPmChange}
         />
-        {open && (
-          <Panel
-            prefixCls={`${prefixCls}-panel`}
-            ref={this.savePanelRef}
-            value={this.state.value}
-            defaultOpenValue={defaultOpenValue}
-            showHour={showHour}
-            showMinute={showMinute}
-            showSecond={showSecond}
-            closePanel={this.closePanel}
-            format={this.getFormat()}
-            disabledHours={disabledHours}
-            disabledMinutes={disabledMinutes}
-            disabledSeconds={disabledSeconds}
-            hideDisabledOptions={hideDisabledOptions}
-            use12Hours={use12Hours}
-            hourStep={hourStep}
-            minuteStep={minuteStep}
-            secondStep={secondStep}
-            onChange={this.onPanelChange}
-            onAmPmChange={this.onAmPmChange}
-          />
-        )}
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
+
+export default TimePicker;
