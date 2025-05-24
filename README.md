@@ -27,23 +27,27 @@ npm i --save react-samay
 
 ```js
 import { TimePicker } from 'react-samay';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 // import css file
 import 'react-samay/index.css';
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = createRoot(container);
+
+root.render(
   <TimePicker
     value={new Date()}
     onChange={(date) => {
       console.log(date);
     }}
-  />,
-  <div id="app" />,
+  />
 );
 ```
 
-You can find more storybook examples [here](https://sushantdhiman.com/projects/react-samay).
+## Storybook Examples
+
+You can find storybook examples [here](https://sushantdhiman.com/projects/react-samay).
 
 ## API
 

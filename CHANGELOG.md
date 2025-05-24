@@ -1,5 +1,10 @@
 # Changelog
 
+## next
+
+- refactor: use react-hooks
+- breaking: support only `react>=18`
+
 ## 3.0.0
 
 - bundle: use rollup (with terser ecma:2022)
