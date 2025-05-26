@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 4.0.0
 
 - refactor: use react-hooks
 - breaking: support only `react>=18`
