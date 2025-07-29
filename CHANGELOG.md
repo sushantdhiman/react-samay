@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.1
+
+- fix: remove un-used forwardRef for panel component
+
 ## 4.0.0
 
 - refactor: use react-hooks
