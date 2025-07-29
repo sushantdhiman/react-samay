@@ -164,4 +164,4 @@ function Panel({
   );
 }
 
-export default React.forwardRef(Panel);
+export default Panel;

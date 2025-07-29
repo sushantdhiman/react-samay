@@ -120,7 +120,6 @@ function TimePicker(props: Props) {
   const [open, setOpen] = useState<boolean>(props.defaultOpen ?? false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const panelRef = useRef<typeof Panel>(null);
 
   // Sync controlled value and open state
   useEffect(() => {
@@ -210,7 +209,6 @@ function TimePicker(props: Props) {
       {open && (
         <Panel
           prefixCls={`${prefixCls}-panel`}
-          ref={panelRef}
           value={value}
           defaultOpenValue={defaultOpenValue}
           showHour={showHour}
