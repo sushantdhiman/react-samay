@@ -11,6 +11,7 @@ export default {
       file: './lib/index.esm.js',
       format: 'esm',
       sourcemap: true,
+      sourcemapExcludeSources: true,
     },
   ],
   plugins: [
