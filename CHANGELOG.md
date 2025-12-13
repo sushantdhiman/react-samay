@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+- internal: reduce sourcemap size
+
 ## 4.0.1
 
 - fix: remove un-used forwardRef for panel component
